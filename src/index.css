@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /* 推しカラー（基本色：#be2152） */
+  --color-oshi-primary: #be2152;
+
+  --background-image-v-cuore-vignette: radial-gradient(
+    circle at center, 
+    #ffffff 45%, 
+    #fff0f4 95%, 
+    var(--color-oshi-primary) 100%
+  );
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+.bg-v-cuore-vignette {
+  background-image: var(--background-image-v-cuore-vignette);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+.bg-v-cuore-content {
+  background-image: var(--background-image-v-cuore-vignette);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
