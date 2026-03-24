@@ -156,52 +156,69 @@ function App() {
               </div>
             </div>
 
-            {/* 🎙️ ホロライブ：マイク（ image_c9aabf.png の形状・詳細を反映 ） */}
-            <div className={`absolute flex items-center justify-center rotate-[-30deg] transition-all duration-1000 ${viewMode === 'web'
-                ? 'w-[12%] h-[20%] bottom-[15%] left-[5%]'
-                : 'w-[6%] h-[10%] bottom-[15%] left-[5%]'
-              }`}>
-              {/* 周囲のオーラ */}
-              <div className="absolute w-[120%] h-[120%] bg-oshi-primary/10 rounded-full blur-40px animate-mic-cloud" />
+{/* 🎙️ ホロライブ：マイク（シルエット完全固定・位置調整 Ver） */}
+<div className={`absolute flex items-center justify-center rotate-[-30deg] transition-all duration-1000 pointer-events-none ${
+  viewMode === 'web' 
+    ? 'w-[10%] h-[18%] bottom-[20%] left-[5%]' // WEB：左下に控えめに配置
+    : 'w-[45%] h-[25%] bottom-[5%] left-[-10%]' // MOBILE：存在感を出す
+}`}>
+  {/* 周囲のオーラ */}
+  <div className="absolute w-[140%] h-[140%] bg-[#DB6B8F]/20 rounded-full blur-[60px] animate-mic-cloud" />
 
-              {/* マイク本体：ここを flex-col で縦に並べる */}
-              <div className="relative flex flex-col items-center animate-mic-breathe w-[45%] h-full">
+  {/* マイク本体：シルエットは一切いじらず、12sの呼吸にのみ同期 */}
+  <div className="relative w-full h-full animate-mic-breathe drop-shadow-2xl">
+    <svg 
+      viewBox="0 0 400 550" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-full h-full text-[#DB6B8F]"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      {/* 1. マイクヘッド（固定） */}
+      <circle cx="200" cy="110" r="85" fill="currentColor" />
+      
+      {/* 2. 接続部（固定：同じ濃さの独立パーツ） */}
+      <rect x="110" y="190" width="180" height="18" rx="4" fill="currentColor" />
+      
+      {/* 3. 持ち手（固定：直線から直前で太くなるフレア） */}
+      <path
+        d="M 165 480 
+           L 235 480 
+           L 235 250 
+           L 275 208 
+           L 125 208 
+           L 165 250 
+           Z"
+        fill="currentColor"
+      />
+      
+      {/* 4. 底の端子（固定） */}
+      <path 
+        d="M 180 480 L 185 510 C 185 515 190 520 200 520 C 210 520 215 515 215 510 L 220 480 Z" 
+        fill="currentColor" 
+        opacity="0.95"
+      />
 
-                {/* 🎤 マイクヘッド：完璧な「正円」を死守し、image_40.pngの形状を再現 */}
-                <div className="relative w-full aspect-square h-auto bg-oshi-primary/30 rounded-full -mb-[25%] shadow-lg z-10 shrink-0">
-                  {/* ヘッドの点 ( image_40.pngの再現 ) */}
-                  {[...Array(2)].map((_, i) => (
-                    <div key={i} className="absolute w-[8%] aspect-square bg-white rounded-full"
-                      style={{ top: `${15 + i * 20}%`, left: '15%', opacity: 0.8 }}
-                    />
-                  ))}
-                </div>
+      {/* 5. スリット（固定） */}
+      <path 
+        d="M 135 175 Q 200 195 265 175" 
+        stroke="white" 
+        strokeWidth="4" 
+        strokeLinecap="round"
+        opacity="0.15"
+      />
+    </svg>
+  </div>
 
-                {/* 🏗️ 持ち手：image_40.pngのテーパード形状（下が細くなる）を再現 */}
-                <div className="relative w-[70%] flex-1 bg-oshi-primary/20 -mt-2"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 20% 100%)' }}
-                >
-                  {/* 持ち手のリブ ( image_40.pngの再現 ) */}
-                  {[...Array(2)].map((_, i) => (
-                    <div key={i} className="absolute w-[70%] h-3px bg-white opacity-40 rounded-full"
-                      style={{ top: `${15 + i * 15}%`, left: '15%' }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* 星のエフェクト */}
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="absolute w-[6%] h-[6%] bg-oshi-primary/40 animate-star-rise"
-                  style={{
-                    '--x': `${(i - 2) * 45}px`,
-                    '--y': `${-110 - i * 25}px`,
-                    animationDelay: `${i * 0.8}s`,
-                    clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
-                  } as any}
-                />
-              ))}
-            </div>
+  {/* ✨ 舞い上がる星（V-SYNC同期） */}
+  <div className="absolute -right-10 bottom-24 flex flex-col items-center space-y-4 opacity-40">
+     {[...Array(3)].map((_, i) => (
+       <svg key={i} width="24" height="24" viewBox="0 0 12 12" className="text-[#DB6B8F] animate-pulse">
+         <path d="M6 0 L7.34 4.66 L12 6 L7.34 7.34 L6 12 L4.66 7.34 L0 6 L4.66 4.66 Z" fill="currentColor"/>
+       </svg>
+     ))}
+  </div>
+</div>
           </div>
         </div>
 
