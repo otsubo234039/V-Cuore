@@ -5,14 +5,17 @@ This diagram summarizes the current project layout.
 ## Tree
 
 ```text
-V-Cuore(卒論)/
+V-Cuore/
 ├── .dockerignore
 ├── docker-compose.yml
 ├── Dockerfile
+├── FILE_STRUCTURE.md
 ├── index.html
 ├── package-lock.json
 ├── package.json
+├── pnpm-lock.yaml
 ├── postcss.config.js
+├── README.md
 ├── tailwind.config.js
 ├── tsconfig.json
 ├── tsconfig.tsbuildinfo
@@ -42,7 +45,9 @@ V-Cuore(卒論)/
 │   ├── pages/
 │   │   ├── index.ts
 │   │   └── home/
-│   │       └── HomePage.tsx
+│   │       ├── HomePage.tsx
+│   │       ├── index.tsx
+│   │       └── Rainbow.tsx
 │   ├── store/
 │   │   └── index.ts
 │   ├── types/
@@ -50,14 +55,15 @@ V-Cuore(卒論)/
 │   └── utils/
 │       └── index.ts
 ├── dist/           (build output)
-└── node_modules/   (dependencies)
+├── node_modules/   (dependencies)
+└── .git/           (git metadata)
 ```
 
 ## Mermaid
 
 ```mermaid
 graph TD
-  A["V-Cuore(卒論)"]
+  A["V-Cuore"]
 
   A --> B["public"]
   A --> C["src"]
@@ -92,6 +98,8 @@ graph TD
 
   C8 --> C8A["index.ts"]
   C8 --> C8B["home/HomePage.tsx"]
+  C8 --> C8C["home/index.tsx"]
+  C8 --> C8D["home/Rainbow.tsx"]
 
   D --> D1["docker-compose.yml"]
   D --> D2["Dockerfile"]
@@ -100,4 +108,6 @@ graph TD
   D --> D5["postcss.config.js"]
   D --> D6["tsconfig.json"]
   D --> D7["package.json"]
+  D --> D8["package-lock.json"]
+  D --> D9["pnpm-lock.yaml"]
 ```

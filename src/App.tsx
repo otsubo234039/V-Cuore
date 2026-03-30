@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Header } from './components/layout';
+import { Microphone } from './pages/home/Microphone';
+import { Rainbow } from './pages/home/Rainbow';
+import { VspoTarget } from './pages/home/Target';
+import { NanashiInk } from './pages/home/NanashiInk';
 
 function App() {
   const [viewMode, setViewMode] = useState<'web' | 'mobile'>('web');
@@ -83,142 +87,17 @@ function App() {
                 style={{ left: `${15 + i * 15}%`, top: '-5%', animationDelay: `${i * 1.5}s` }} />
             ))}
 
-            {/* 🌈 にじさんじ：左上 */}
-            <div className={`absolute flex items-center justify-center transition-all duration-1000 aspect-square overflow-visible ${ //overflow-visibleにする
-              viewMode === 'web'
-                ? 'w-[15%] top-[15%] left-[0%]' // 大幅縮小、位置も調整
-                : 'w-[45%] top-[2%] left-[10%]' // 大幅縮小
-              }`}>
-              {/* 虹の本体コンテナ */}
-              <div className="absolute inset-0 flex items-center justify-center animate-rainbow-sweep blur-[1px]"
-                style={{
-                  // 扇形のマスク（四角いエッジを消すために、マスクの範囲を広げてふんわり消す）
-                  WebkitMaskImage: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, white 30deg, white 120deg, transparent 150deg)'
-                }}
-              >
-                {/* 虹の7層（外側から内側へ） */}
-                {[0, 1, 2, 3, 4, 5, 6].map((i) => {
-                  // 親のサイズ(100%)に対して、外側から内側へ半径を減らす計算
-                  const widthPercent = 100 - i * 13; // 100, 87, 74, 61, 48, 35, 22
+            {/*にじさんじの虹 */}
+            <Rainbow viewMode={viewMode} />
 
-                  return (
-                    <div
-                      key={i}
-                      className="absolute rounded-full"
-                      style={{
-                        width: `${widthPercent}%`, // 親の箱に収まるように
-                        height: `${widthPercent}%`,
-                        borderWidth: '10px', // 線を細く（12px -> 4px）
-                        borderColor: `rgba(190,33,82, ${0.9 - i * 0.05})`, // ぶいすぽピンク
-                        // 右上1/4だけ見せる（中心から右上への扇形）
-                        clipPath: 'polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%)'
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+            {/*ぶいすポの的 */}
+            <VspoTarget viewMode={viewMode} />
 
+            {/* ななしいんく */}
+            <NanashiInk viewMode={viewMode} />
 
-
-            {/* 🎯 ぶいすぽ：的 */}
-            <div className={`absolute flex items-center justify-center animate-[spin_12s_linear_infinite] transition-all duration-1000 ${viewMode === 'web' ? 'bottom-[5%] right-[-5%] w-[12%] aspect-square' : 'bottom-[15%] right-[-5%] w-[25%] aspect-square'}`}>
-              <div className="absolute inset-0 border-2 border-oshi-primary/20 rounded-full blur-sm" />
-              <div className="w-[30%] h-[30%] border border-oshi-primary/30 rounded-full animate-pulse" />
-            </div>
-
-            {/* 🚪 【ネオポルテ ＋ ななし】：情緒揺らぎ・％統合コンテナ */}
-            <div
-              className={`absolute flex items-center justify-center transition-all duration-1000 ${viewMode === 'web'
-                ? 'w-[22%] aspect-square top-[10%] right-[-5%]'
-                : 'w-[45%] aspect-square top-[25%] right-[-5%]'
-                }`}
-            >
-              {/* 7️⃣ ななしいんく：情緒ダブルネオン */}
-              <div className="absolute left-[-25%] top-[25%] flex gap-[5%] z-10 w-[30%] h-[30%]">
-                <div
-                  className="w-full h-full bg-oshi-primary animate-nanashi-main shadow-[0_0_20px_rgba(190,33,82,0.8)]"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 15%, 55% 100%, 35% 100%, 80% 15%, 0% 15%)' }}
-                />
-                <div
-                  className="w-[70%] h-[70%] mt-[20%] bg-oshi-primary/90 animate-nanashi-sub"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 15%, 55% 100%, 35% 100%, 80% 15%, 0% 15%)' }}
-                />
-              </div>
-
-              {/* 🚪 ネオポルテ：高出力扉 */}
-              <div className="relative w-full h-full flex items-center justify-center">
-                <div
-                  className="absolute inset-0 border-4 border-oshi-primary/90 blur-[0.5px] animate-mic-cloud"
-                  style={{ clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' }}
-                />
-                <div className="absolute w-[80%] h-[80%] bg-oshi-primary/30 blur-40px rounded-full animate-nanashi-main" />
-              </div>
-            </div>
-
-{/* 🎙️ ホロライブ：マイク（シルエット完全固定・位置調整 Ver） */}
-<div className={`absolute flex items-center justify-center rotate-[-30deg] transition-all duration-1000 pointer-events-none ${
-  viewMode === 'web' 
-    ? 'w-[10%] h-[18%] bottom-[20%] left-[5%]' // WEB：左下に控えめに配置
-    : 'w-[45%] h-[25%] bottom-[5%] left-[-10%]' // MOBILE：存在感を出す
-}`}>
-  {/* 周囲のオーラ */}
-  <div className="absolute w-[140%] h-[140%] bg-[#DB6B8F]/20 rounded-full blur-[60px] animate-mic-cloud" />
-
-  {/* マイク本体：シルエットは一切いじらず、12sの呼吸にのみ同期 */}
-  <div className="relative w-full h-full animate-mic-breathe drop-shadow-2xl">
-    <svg 
-      viewBox="0 0 400 550" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full text-[#DB6B8F]"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      {/* 1. マイクヘッド（固定） */}
-      <circle cx="200" cy="110" r="85" fill="currentColor" />
-      
-      {/* 2. 接続部（固定：同じ濃さの独立パーツ） */}
-      <rect x="110" y="190" width="180" height="18" rx="4" fill="currentColor" />
-      
-      {/* 3. 持ち手（固定：直線から直前で太くなるフレア） */}
-      <path
-        d="M 165 480 
-           L 235 480 
-           L 235 250 
-           L 275 208 
-           L 125 208 
-           L 165 250 
-           Z"
-        fill="currentColor"
-      />
-      
-      {/* 4. 底の端子（固定） */}
-      <path 
-        d="M 180 480 L 185 510 C 185 515 190 520 200 520 C 210 520 215 515 215 510 L 220 480 Z" 
-        fill="currentColor" 
-        opacity="0.95"
-      />
-
-      {/* 5. スリット（固定） */}
-      <path 
-        d="M 135 175 Q 200 195 265 175" 
-        stroke="white" 
-        strokeWidth="4" 
-        strokeLinecap="round"
-        opacity="0.15"
-      />
-    </svg>
-  </div>
-
-  {/* ✨ 舞い上がる星（V-SYNC同期） */}
-  <div className="absolute -right-10 bottom-24 flex flex-col items-center space-y-4 opacity-40">
-     {[...Array(3)].map((_, i) => (
-       <svg key={i} width="24" height="24" viewBox="0 0 12 12" className="text-[#DB6B8F] animate-pulse">
-         <path d="M6 0 L7.34 4.66 L12 6 L7.34 7.34 L6 12 L4.66 7.34 L0 6 L4.66 4.66 Z" fill="currentColor"/>
-       </svg>
-     ))}
-  </div>
-</div>
+            {/*ホロライブのマイク*/}
+            <Microphone viewMode={viewMode} />
           </div>
         </div>
 
