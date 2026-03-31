@@ -11,6 +11,7 @@ V-Cuore/
 ├── Dockerfile
 ├── FILE_STRUCTURE.md
 ├── index.html
+├── proxy.ts
 ├── package-lock.json
 ├── package.json
 ├── pnpm-lock.yaml
@@ -29,6 +30,9 @@ V-Cuore/
 │   ├── main.tsx
 │   ├── api/
 │   │   └── index.ts
+│   ├── assets/
+│   │   ├── cloud.svg
+│   │   └── ink-texture.png
 │   ├── components/
 │   │   ├── common/
 │   │   │   └── index.ts
@@ -47,7 +51,11 @@ V-Cuore/
 │   │   └── home/
 │   │       ├── HomePage.tsx
 │   │       ├── index.tsx
+│   │       ├── Microphone.tsx
+│   │       ├── NanashiInk.tsx
+│   │       ├── NeoPorte.tsx
 │   │       └── Rainbow.tsx
+│   │       └── Target.tsx
 │   ├── store/
 │   │   └── index.ts
 │   ├── types/
@@ -78,28 +86,36 @@ graph TD
   C --> C2["main.tsx"]
   C --> C3["index.css"]
   C --> C4["api/index.ts"]
-  C --> C5["components/"]
-  C --> C6["constants/"]
-  C --> C7["hooks/index.ts"]
-  C --> C8["pages/"]
-  C --> C9["store/index.ts"]
-  C --> C10["types/index.ts"]
-  C --> C11["utils/index.ts"]
+  C --> C5["assets/"]
+  C --> C6["components/"]
+  C --> C7["constants/"]
+  C --> C8["hooks/index.ts"]
+  C --> C9["pages/"]
+  C --> C10["store/index.ts"]
+  C --> C11["types/index.ts"]
+  C --> C12["utils/index.ts"]
 
-  C5 --> C5A["common/index.ts"]
-  C5 --> C5B["elements/"]
-  C5 --> C5C["layout/"]
-  C5C --> C5C1["HamburgerMenu.tsx"]
-  C5C --> C5C2["Header.tsx"]
-  C5C --> C5C3["index.ts"]
+  C5 --> C5A["cloud.svg"]
+  C5 --> C5B["ink-texture.png"]
 
-  C6 --> C6A["Color.ts"]
-  C6 --> C6B["index.ts"]
+  C6 --> C6A["common/index.ts"]
+  C6 --> C6B["elements/"]
+  C6 --> C6C["layout/"]
+  C6C --> C6C1["HamburgerMenu.tsx"]
+  C6C --> C6C2["Header.tsx"]
+  C6C --> C6C3["index.ts"]
 
-  C8 --> C8A["index.ts"]
-  C8 --> C8B["home/HomePage.tsx"]
-  C8 --> C8C["home/index.tsx"]
-  C8 --> C8D["home/Rainbow.tsx"]
+  C7 --> C7A["Color.ts"]
+  C7 --> C7B["index.ts"]
+
+  C9 --> C9A["index.ts"]
+  C9 --> C9B["home/HomePage.tsx"]
+  C9 --> C9C["home/index.tsx"]
+  C9 --> C9D["home/Microphone.tsx"]
+  C9 --> C9E["home/NanashiInk.tsx"]
+  C9 --> C9F["home/NeoPorte.tsx"]
+  C9 --> C9G["home/Rainbow.tsx"]
+  C9 --> C9H["home/Target.tsx"]
 
   D --> D1["docker-compose.yml"]
   D --> D2["Dockerfile"]
@@ -110,4 +126,5 @@ graph TD
   D --> D7["package.json"]
   D --> D8["package-lock.json"]
   D --> D9["pnpm-lock.yaml"]
+  D --> D10["proxy.ts"]
 ```
