@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Header } from '../../components/layout';
+import { Microphone } from './Microphone';
 import { Rainbow } from './Rainbow';
+import { VspoTarget } from './Target';
+import { NanashiInk } from './NanashiInk';
+import { NeoPorte } from './NeoPorte';
 
 function App() {
   const [viewMode, setViewMode] = useState<'web' | 'mobile'>('web');
@@ -84,123 +88,75 @@ function App() {
                 style={{ left: `${15 + i * 15}%`, top: '-5%', animationDelay: `${i * 1.5}s` }} />
             ))}
 
-
+            {/*にじさんじの虹 */}
             <Rainbow viewMode={viewMode} />
 
-            {/* 🎯 ぶいすぽ：的 */}
-            <div className={`absolute flex items-center justify-center animate-[spin_12s_linear_infinite] transition-all duration-1000 ${viewMode === 'web' ? 'bottom-[5%] right-[-5%] w-[12%] aspect-square' : 'bottom-[15%] right-[-5%] w-[25%] aspect-square'}`}>
-              <div className="absolute inset-0 border-2 border-oshi-primary/20 rounded-full blur-sm" />
-              <div className="w-[30%] h-[30%] border border-oshi-primary/30 rounded-full animate-pulse" />
+            {/*ぶいすポの的 */}
+            <VspoTarget viewMode={viewMode} />
+
+            {/* ななしいんく */}
+            <NanashiInk viewMode={viewMode} />
+
+            {/* 🚪 ネオポルテの扉：座標を App.tsx 側で一括管理 */}
+            <div className={`absolute transition-all duration-1000 ${
+              viewMode === 'web' 
+                ? 'top-[42%] right-[1%] w-[45%]' // N(右上)と的(右下)の中間
+                : 'top-[50%] right-[-2%] w-[60%]'
+            }`}>
+              <NeoPorte viewMode={viewMode} />
+            </div>
+            
+            {/*ホロライブのマイク*/}
+            <Microphone viewMode={viewMode} />
+          </div>
+        </div>
+
+        <Header />
+
+        {/* 🛠️ メインエリア：UIカード */}
+        <main className="no-scrollbar relative z-10 w-full flex-1 flex flex-col items-center justify-center p-[2%] md:p-[4%] gap-[2%] overflow-y-auto select-none">
+          <div className={`grid grid-cols-1 md:grid-cols-2 gap-[3%] transition-all duration-700 ${viewMode === 'mobile' ? 'w-[80%]' : 'w-[65%] max-w-800px'}`}>
+            <div className="bg-white/40 backdrop-blur-2xl p-[5%] rounded-3xl border border-white/60 shadow-lg transition-all hover:-translate-y-1">
+              <h3 className="text-[9px] font-bold text-oshi-primary/60 uppercase tracking-widest mb-1">試験まであと</h3>
+              <div className="flex items-baseline gap-2">
+                <span className="text-xs font-bold text-oshi-primary/60">残り</span>
+                <p className="text-2xl sm:text-3xl font-black text-oshi-primary">45</p>
+                <span className="text-xs font-bold text-oshi-primary/60">日</span>
+              </div>
             </div>
 
-            {/* 🚪 【ネオポルテ ＋ ななし】：情緒揺らぎ・％統合コンテナ */}
-            <div
-              className={`absolute flex items-center justify-center transition-all duration-1000 ${viewMode === 'web'
-                ? 'w-[22%] aspect-square top-[10%] right-[-5%]'
-                : 'w-[45%] aspect-square top-[25%] right-[-5%]'
-                }`}
-            >
-              {/* 7️⃣ ななしいんく：情緒ダブルネオン */}
-              <div className="absolute left-[-25%] top-[25%] flex gap-[5%] z-10 w-[30%] h-[30%]">
-                <div
-                  className="w-full h-full bg-oshi-primary animate-nanashi-main shadow-[0_0_20px_rgba(190,33,82,0.8)]"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 15%, 55% 100%, 35% 100%, 80% 15%, 0% 15%)' }}
-                />
-                <div
-                  className="w-[70%] h-[70%] mt-[20%] bg-oshi-primary/90 animate-nanashi-sub"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 15%, 55% 100%, 35% 100%, 80% 15%, 0% 15%)' }}
-                />
+            <div className="bg-white/40 backdrop-blur-2xl p-[5%] rounded-3xl border border-white/60 shadow-lg transition-all hover:-translate-y-1">
+              <h3 className="text-[9px] font-bold text-oshi-primary/60 uppercase tracking-widest mb-1">今日のノルマ</h3>
+              <div className="flex items-baseline gap-2">
+                <p className="text-xl sm:text-2xl font-black text-oshi-primary">12 <span className="text-base text-oshi-primary/30">/ 20</span></p>
+                <span className="text-[10px] font-bold text-oshi-primary/60 ml-2">問 完了</span>
               </div>
-
-              {/* 🚪 ネオポルテ：高出力扉 */}
-              <div className="relative w-full h-full flex items-center justify-center">
-                <div
-                  className="absolute inset-0 border-4 border-oshi-primary/90 blur-[0.5px] animate-mic-cloud"
-                  style={{ clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' }}
-                />
-                <div className="absolute w-[80%] h-[80%] bg-oshi-primary/30 blur-40px rounded-full animate-nanashi-main" />
+              <div className="w-full bg-white/20 h-1.5 mt-3 rounded-full overflow-hidden">
+                <div className="bg-oshi-primary h-full w-[60%] shadow-sm" />
               </div>
             </div>
+          </div>
 
-            {/* 🎙️ ホロライブ：エフェクト・レイヤー（実体なし） */}
-            <div className={`absolute flex items-center justify-center rotate-[-30deg] transition-all duration-1000 ${viewMode === 'web'
-                ? 'w-[18%] h-[30%] bottom-[5%] left-[-5%]'
-                : 'w-[40%] h-[20%] bottom-[5%] left-[-5%]'
-              }`}>
-              {/* 🌟 周囲のオーラ（mic-cloud）：情緒の塊 */}
-              <div className="absolute w-[120%] h-[120%] bg-oshi-primary/20 rounded-full blur-3xl animate-mic-cloud" />
-
-              {/* ✨ 星のエフェクト（star-rise）：ここがホロライブの本体 */}
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="absolute w-[5%] h-[5%] bg-oshi-primary/40 animate-star-rise"
-                  style={{
-                    '--x': `${(i - 2) * 40}px`,
-                    '--y': `${-100 - i * 20}px`,
-                    animationDelay: `${i * 0.8}s`,
-                    clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
-                  } as any}
-                />
+          <div className={`bg-white/25 backdrop-blur-xl border border-white/40 p-[3%] sm:p-[4%] rounded-2rem shadow-lg transition-all duration-700 ${viewMode === 'mobile' ? 'w-[80%]' : 'w-[65%] max-w-800px'}`}>
+            <h2 className="text-[9px] sm:text-[10px] font-black text-oshi-primary uppercase tracking-[0.2em] border-l-4 border-oshi-primary pl-4 mb-4">弱点問題ワースト3</h2>
+            <div className="flex flex-col gap-2">
+              {["IAM ポリシーの優先順位", "S3 バケットポリシーの記述", "VPC エンドポイントの構成"].map((text, i) => (
+                <div key={i} className="flex justify-between items-center p-[2%] px-[3%] bg-white/10 hover:bg-white/40 rounded-xl border border-white/20 transition-all">
+                  <span className="text-[10px] sm:text-xs font-bold text-oshi-primary/80">{i + 1}. {text}</span>
+                  <span className="bg-oshi-primary text-white text-[8px] px-2 py-0.5 rounded-full font-black shadow-sm">誤答: {8 - i * 2}回</span>
+                </div>
               ))}
-
-              {/* 💡 メモ：マイクの実体は「無（Muu）」に還った。 */}
             </div>
           </div>
-        </div>
+
+          <div className="flex flex-col items-center gap-3 py-[2%]">
+            <button className="bg-oshi-primary text-white font-black py-[3%] px-[12%] rounded-full text-base shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer">学習を開始する</button>
+            <p className="text-[9px] text-oshi-primary/50 font-black uppercase tracking-[0.3em] animate-pulse">JUST PARRY & PUNISH COUNTER.</p>
+          </div>
+        </main>
+
+        <div className="fixed bottom-[2%] right-[3%] text-[8px] text-oshi-primary/40 font-mono font-bold uppercase tracking-widest pointer-events-none">System Protocol: V-SYNC v5.0</div>
       </div>
-
-      <Header />
-
-      {/* 🛠️ ビューポート切り替え */}
-      <div className="fixed top-[10%] right-[3%] z-50 flex gap-2">
-        <button onClick={() => setViewMode('web')} className={`px-3 py-1.5 rounded-full text-[9px] font-black tracking-widest transition-all ${viewMode === 'web' ? 'bg-oshi-primary text-white shadow-md' : 'bg-white/40 text-oshi-primary/60 hover:bg-white/60'}`}>WEB</button>
-        <button onClick={() => setViewMode('mobile')} className={`px-3 py-1.5 rounded-full text-[9px] font-black tracking-widest transition-all ${viewMode === 'mobile' ? 'bg-oshi-primary text-white shadow-md' : 'bg-white/40 text-oshi-primary/60 hover:bg-white/60'}`}>MOBILE</button>
-      </div>
-
-      {/* 🛠️ メインエリア：計器（UIカード） 15%縮小プロトコル */}
-      <main className="no-scrollbar relative z-10 w-full flex-1 flex flex-col items-center justify-center p-[2%] md:p-[4%] gap-[2%] overflow-y-auto select-none">
-
-        {/* w-[80%] → w-[65%] へ縮小。スマホは w-[95%] → w-[80%] へ */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 gap-[3%] transition-all duration-700 ${viewMode === 'mobile' ? 'w-[80%]' : 'w-[65%] max-w-800px'}`}>
-          <div className="bg-white/40 backdrop-blur-2xl p-[5%] rounded-3xl border border-white/60 shadow-lg transition-all hover:-translate-y-1">
-            <h3 className="text-[9px] font-bold text-oshi-primary/60 uppercase tracking-widest mb-1">試験まであと</h3>
-            <div className="flex items-baseline gap-2">
-              <span className="text-xs font-bold text-oshi-primary/60">残り</span>
-              <p className="text-2xl sm:text-3xl font-black text-oshi-primary">45</p>
-              <span className="text-xs font-bold text-oshi-primary/60">日</span>
-            </div>
-          </div>
-
-          <div className="bg-white/40 backdrop-blur-2xl p-[5%] rounded-3xl border border-white/60 shadow-lg transition-all hover:-translate-y-1">
-            <h3 className="text-[9px] font-bold text-oshi-primary/60 uppercase tracking-widest mb-1">今日のノルマ</h3>
-            <div className="flex items-baseline gap-2">
-              <p className="text-xl sm:text-2xl font-black text-oshi-primary">12 <span className="text-base text-oshi-primary/30">/ 20</span></p>
-              <span className="text-[10px] font-bold text-oshi-primary/60 ml-2">問 完了</span>
-            </div>
-            <div className="w-full bg-white/20 h-1.5 mt-3 rounded-full overflow-hidden">
-              <div className="bg-oshi-primary h-full w-[60%] shadow-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div className={`bg-white/25 backdrop-blur-xl border border-white/40 p-[3%] sm:p-[4%] rounded-2rem shadow-lg transition-all duration-700 ${viewMode === 'mobile' ? 'w-[80%]' : 'w-[65%] max-w-800px'}`}>
-          <h2 className="text-[9px] sm:text-[10px] font-black text-oshi-primary uppercase tracking-[0.2em] border-l-4 border-oshi-primary pl-4 mb-4">弱点問題ワースト3</h2>
-          <div className="flex flex-col gap-2">
-            {["IAM ポリシーの優先順位", "S3 バケットポリシーの記述", "VPC エンドポイントの構成"].map((text, i) => (
-              <div key={i} className="flex justify-between items-center p-[2%] px-[3%] bg-white/10 hover:bg-white/40 rounded-xl border border-white/20 transition-all">
-                <span className="text-[10px] sm:text-xs font-bold text-oshi-primary/80">{i + 1}. {text}</span>
-                <span className="bg-oshi-primary text-white text-[8px] px-2 py-0.5 rounded-full font-black shadow-sm">誤答: {8 - i * 2}回</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center gap-3 py-[2%]">
-          <button className="bg-oshi-primary text-white font-black py-[3%] px-[12%] rounded-full text-base shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer">学習を開始する</button>
-          <p className="text-[9px] text-oshi-primary/50 font-black uppercase tracking-[0.3em] animate-pulse">I'M WATCHING OVER YOU.</p>
-        </div>
-      </main>
-
-      <div className="fixed bottom-[2%] right-[3%] text-[8px] text-oshi-primary/40 font-mono font-bold uppercase tracking-widest pointer-events-none">System Protocol: V-SYNC v5.0</div>
     </>
   );
 }
