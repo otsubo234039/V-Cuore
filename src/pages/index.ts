@@ -1,3 +1,1 @@
-export { default as LoginPage } from './LoginPage'
-export { default as HomePage } from './HomePage'
-export { default as StudyPage } from './StudyPage'
+export { default as HomePage } from './home'

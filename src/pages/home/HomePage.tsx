@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '../../components/layout';
-import { Microphone } from './Microphone';
+import { Microphone } from './Microphone.js';
 import { Rainbow } from './Rainbow';
 import { VspoTarget } from './Target';
 import { NanashiInk } from './NanashiInk';
