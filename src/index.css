@@ -1,31 +1,27 @@
+/* src/index.css */
 @import "tailwindcss";
 
-@theme {
-  /* 推しカラー（基本色：#be2152） */
-  --color-oshi-primary: #be2152;
+:root {
+  /* 🛡️ JSが動く前の「BE2152（赤）」を初期座標に固定 */
+  --oshi-primary: #be2152;
+  --oshi-primary-20: #be215233;
+}
 
+@theme {
+  /* 🛰️ Tailwindクラスと変数を同期。これで「text-oshi-primary」が使えるようになる */
+  --color-oshi-primary: var(--oshi-primary);
+  --color-oshi-primary-20: var(--oshi-primary-20);
+
+  /* 🌌 四隅の気配：92%まで白、最後の8%で透過版(oshi-primary-20)をスッと溜める */
   --background-image-v-cuore-vignette: radial-gradient(
     circle at center, 
-    #ffffff 45%, 
-    #fff0f4 95%, 
-    var(--color-oshi-primary) 100%
+    #ffffff 92%, 
+    var(--oshi-primary-20) 100%
   );
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-}
-
+/* 🚀 背景プロトコル：このクラスを HomePage の div に付与しろ */
 .bg-v-cuore-vignette {
-  background-image: var(--background-image-v-cuore-vignette);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-}
-
-.bg-v-cuore-content {
   background-image: var(--background-image-v-cuore-vignette);
   background-attachment: fixed;
   background-repeat: no-repeat;

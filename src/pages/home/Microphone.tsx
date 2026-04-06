@@ -1,3 +1,4 @@
+// src/pages/home/Microphone.tsx
 import React from 'react';
 
 interface MicrophoneProps {
@@ -5,15 +6,12 @@ interface MicrophoneProps {
 }
 
 export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
-  // 色の定義：基調となるベリーピンク
-  const theme = {
-    primary: "#E91E63",
-    ink: "#D81B60",
-  };
+  // 🚀 粛清 1: ハードコードされた色の定義（themeオブジェクト）をパージ。
+  // これにより、このコクピット（コンポーネント）内の固定思想は排除された。
 
   // 背景に配置する拡大した星の配列（不規則な配置とサイズ）
   const bgStars = [
-    { top: '-20%', left: '-10%', size: '150px', delay: '0s', opacity: 0.15 }, // 不透明度を上げる
+    { top: '-20%', left: '-10%', size: '150px', delay: '0s', opacity: 0.15 },
     { top: '30%', left: '70%', size: '120px', delay: '2s', opacity: 0.10 },
     { top: '70%', left: '10%', size: '180px', delay: '4s', opacity: 0.12 },
     { top: '10%', left: '40%', size: '100px', delay: '1s', opacity: 0.08 },
@@ -27,7 +25,7 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
         : 'w-[45%] h-[25%] bottom-[5%] left-[-5%] rotate-[-10deg]'
     }`}>
       
-      {/* 1. 背面の拡大した星々（Stardust Background・SVGで具現化・色を濃く） */}
+      {/* 1. 背面の拡大した星々（Stardust Background） */}
       <div className="absolute inset-0 w-[200%] h-[200%] -translate-x-1/4 -translate-y-1/4 z-0">
         {bgStars.map((star, i) => (
           <svg 
@@ -39,13 +37,15 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
             style={{
               top: star.top,
               left: star.left,
-              color: theme.primary, // メインのピンク
+              // 🚀 粛清 2: 固定色（theme.primary）をパージし、司令部の実弾を装填。
+              color: 'var(--oshi-primary)', 
               opacity: star.opacity,
               animationDelay: star.delay,
-              filter: 'blur(1px)', // 遠景感を出すぼかしを少し弱く
+              filter: 'blur(1px)', 
             }}
           >
-            {/* 星のパス。以前の右上に feTurbulence + feColorMatrix のノイズ生成フィルターを追加 */}
+            {/* defs内 filter `stardustAuraMic` は fill="currentColor" を参照するので、
+               上記修正で動的に変わるぞ */}
             <defs>
               <filter id="stardustAuraMic" x="-50%" y="-50%" width="200%" height="200%">
                 <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="noise" />
@@ -63,7 +63,9 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
       </div>
 
       {/* 2. マイク本体（ぷにSVG・マシュマロ発光） */}
-      <div className="relative w-full h-full animate-mic-float drop-shadow-[0_0_20px_rgba(233,30,99,0.5)] z-10">
+      {/* 🚀 粛清 3: drop-shadow の固定色をパージ。
+         Tailwind クラス `shadow-oshi-primary` を付与し、App.tsx で設定した影（shadow）の色と同期しろ。 */}
+      <div className="relative w-full h-full animate-mic-float shadow-xl shadow-oshi-primary z-10">
         <svg 
           viewBox="0 0 400 550" 
           fill="none" 
@@ -72,7 +74,7 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
           preserveAspectRatio="xMidYMid meet"
         >
           <defs>
-            {/* Nと同じマシュマロ発光フィルター */}
+            {/* Nと同じマシュマロ発光フィルター（色は SourceGraphic に依存） */}
             <filter id="micGlowMic" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
               <feMerge>
@@ -81,9 +83,12 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
               </feMerge>
             </filter>
             
+            {/* 🚀 粛清 4: マイク本体のグラデーション（micGrad）をパージ。
+               stopColor を var(--oshi-primary) に差し替え、世界の色と同期させる。
+               グラデーションの開始と終了を同じ色にすることで、純粋な「推し色」のマイクに。 */}
             <linearGradient id="micGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={theme.primary} />
-              <stop offset="100%" stopColor={theme.ink} />
+              <stop offset="0%" stopColor="var(--oshi-primary)" />
+              <stop offset="100%" stopColor="var(--oshi-primary)" />
             </linearGradient>
           </defs>
 
@@ -109,12 +114,15 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
         </svg>
       </div>
 
-      {/* 3. 音波の波紋（既存のものを維持） */}
+      {/* 3. 音波の波紋（existing ripple） */}
       <div className="absolute w-full h-full z-20">
         {[...Array(2)].map((_, i) => (
           <div 
           key={i}
-          className="absolute inset-0 border-2 border-[#E91E63]/30 rounded-full animate-ripple"
+          // 🚀 粛清 5: 波紋の固定色（E91E63/30）をパージ。
+          // Tailwind 4.0 クラス `border-oshi-primary-20` を付空し、
+          // HomePage（あおぎりの葉）と同じ「20% 透過の気配」と同期させる。
+          className="absolute inset-0 border-2 border-oshi-primary-20 rounded-full animate-ripple"
           style={{ animationDelay: `${i * 1.5}s` }}
           />
         ))}
@@ -125,9 +133,9 @@ export const Microphone: React.FC<MicrophoneProps> = ({ viewMode }) => {
           0%, 100% { transform: translateY(0) rotate(0deg); }
           50% { transform: translateY(-15px) rotate(2deg); }
         }
-        /* 拡大した背景の星のための柔らかいパルスアニメーション */
+        /* アニメーション内の不透明度は固定でええ。色が同期すれば気配は保たれる */
         @keyframes merged-star-pulse {
-          0%, 100% { opacity: 0.08; transform: scale(1); } // パルスの不透明度も少し上げる
+          0%, 100% { opacity: 0.08; transform: scale(1); } 
           50% { opacity: 0.18; transform: scale(1.05); }
         }
         @keyframes ripple {

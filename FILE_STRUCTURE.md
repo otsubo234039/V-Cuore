@@ -7,6 +7,7 @@ This diagram summarizes the current project layout.
 ```text
 V-Cuore/
 ├── .dockerignore
+├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
 ├── FILE_STRUCTURE.md
@@ -47,15 +48,19 @@ V-Cuore/
 │   ├── hooks/
 │   │   └── index.ts
 │   ├── pages/
+│   │   ├── Header.tsx
 │   │   ├── index.ts
-│   │   └── home/
+│   │   ├── home/
 │   │       ├── HomePage.tsx
 │   │       ├── index.tsx
 │   │       ├── Microphone.tsx
 │   │       ├── NanashiInk.tsx
 │   │       ├── NeoPorte.tsx
-│   │       └── Rainbow.tsx
+│   │       ├── Rainbow.tsx
 │   │       └── Target.tsx
+│   │   └── login/
+│   │       ├── LoginGate.tsx
+│   │       └── LoginPage.tsx
 │   ├── store/
 │   │   └── index.ts
 │   ├── types/
@@ -109,13 +114,16 @@ graph TD
   C7 --> C7B["index.ts"]
 
   C9 --> C9A["index.ts"]
-  C9 --> C9B["home/HomePage.tsx"]
-  C9 --> C9C["home/index.tsx"]
-  C9 --> C9D["home/Microphone.tsx"]
-  C9 --> C9E["home/NanashiInk.tsx"]
-  C9 --> C9F["home/NeoPorte.tsx"]
-  C9 --> C9G["home/Rainbow.tsx"]
-  C9 --> C9H["home/Target.tsx"]
+  C9 --> C9B["Header.tsx"]
+  C9 --> C9C["home/HomePage.tsx"]
+  C9 --> C9D["home/index.tsx"]
+  C9 --> C9E["home/Microphone.tsx"]
+  C9 --> C9F["home/NanashiInk.tsx"]
+  C9 --> C9G["home/NeoPorte.tsx"]
+  C9 --> C9H["home/Rainbow.tsx"]
+  C9 --> C9I["home/Target.tsx"]
+  C9 --> C9J["login/LoginGate.tsx"]
+  C9 --> C9K["login/LoginPage.tsx"]
 
   D --> D1["docker-compose.yml"]
   D --> D2["Dockerfile"]
