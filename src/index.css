@@ -2,28 +2,32 @@
 @import "tailwindcss";
 
 :root {
-  /* 🛡️ JSが動く前の「BE2152（赤）」を初期座標に固定 */
-  --oshi-primary: #be2152;
-  --oshi-primary-20: #be215233;
+  /* ☀️ ライトモード：純白の戦場 */
+  --bg-main: #ffffff;
+  --bg-card: #ffffff;
+  --text-primary: var(--oshi-primary);
+  --text-muted: rgba(0, 0, 0, 0.4);
+  --border-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  /* 🌙 ダークモード：漆黒の夜戦装備 */
+  --bg-main: #0d0d0d;        /* 🚀 真っ黒。これぞ深淵 */
+  --bg-card: #1a1a1a;        /* 少し浮き上がらせるためのグレー */
+  --text-primary: var(--oshi-primary); /* 推し色は発光体として維持 */
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --border-color: rgba(255, 255, 255, 0.1);
 }
 
 @theme {
-  /* 🛰️ Tailwindクラスと変数を同期。これで「text-oshi-primary」が使えるようになる */
+  /* Tailwindクラスを CSS変数と同期 */
+  --color-main-bg: var(--bg-main);
+  --color-card-bg: var(--bg-card);
   --color-oshi-primary: var(--oshi-primary);
-  --color-oshi-primary-20: var(--oshi-primary-20);
-
-  /* 🌌 四隅の気配：92%まで白、最後の8%で透過版(oshi-primary-20)をスッと溜める */
-  --background-image-v-cuore-vignette: radial-gradient(
-    circle at center, 
-    #ffffff 92%, 
-    var(--oshi-primary-20) 100%
-  );
 }
 
-/* 🚀 背景プロトコル：このクラスを HomePage の div に付与しろ */
-.bg-v-cuore-vignette {
-  background-image: var(--background-image-v-cuore-vignette);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-position: center bottom;
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

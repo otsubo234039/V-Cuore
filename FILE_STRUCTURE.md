@@ -6,25 +6,19 @@ This diagram summarizes the current project layout.
 
 ```text
 V-Cuore/
-├── .dockerignore
-├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
 ├── FILE_STRUCTURE.md
 ├── index.html
-├── proxy.ts
-├── package-lock.json
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.js
+├── proxy.ts
 ├── README.md
 ├── tailwind.config.js
 ├── tsconfig.json
-├── tsconfig.tsbuildinfo
 ├── vite.config.ts
 ├── public/
-│   ├── favicon.ico
-│   └── favicon.svg
 ├── src/
 │   ├── App.tsx
 │   ├── index.css
@@ -32,44 +26,42 @@ V-Cuore/
 │   ├── api/
 │   │   └── index.ts
 │   ├── assets/
-│   │   ├── cloud.svg
-│   │   └── ink-texture.png
 │   ├── components/
 │   │   ├── common/
 │   │   │   └── index.ts
-│   │   ├── elements/
 │   │   └── layout/
 │   │       ├── HamburgerMenu.tsx
 │   │       ├── Header.tsx
 │   │       └── index.ts
 │   ├── constants/
-│   │   ├── Color.ts
-│   │   └── index.ts
+│   │   ├── index.ts
+│   │   └── theme.ts
 │   ├── hooks/
 │   │   └── index.ts
 │   ├── pages/
+│   │   ├── HamburgerMenu.tsx
 │   │   ├── Header.tsx
 │   │   ├── index.ts
 │   │   ├── home/
-│   │       ├── HomePage.tsx
-│   │       ├── index.tsx
-│   │       ├── Microphone.tsx
-│   │       ├── NanashiInk.tsx
-│   │       ├── NeoPorte.tsx
-│   │       ├── Rainbow.tsx
-│   │       └── Target.tsx
-│   │   └── login/
-│   │       ├── LoginGate.tsx
-│   │       └── LoginPage.tsx
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── Microphone.tsx
+│   │   │   ├── NanashiInk.tsx
+│   │   │   ├── NeoPorte.tsx
+│   │   │   ├── Rainbow.tsx
+│   │   │   ├── Target.tsx
+│   │   │   └── index.tsx
+│   │   ├── login/
+│   │   │   ├── LoginGate.tsx
+│   │   │   └── LoginPage.tsx
+│   │   └── settings/
+│   │       └── SettingPage.tsx
 │   ├── store/
 │   │   └── index.ts
 │   ├── types/
 │   │   └── index.ts
 │   └── utils/
 │       └── index.ts
-├── dist/           (build output)
-├── node_modules/   (dependencies)
-└── .git/           (git metadata)
+└── dist/           (build output)
 ```
 
 ## Mermaid
@@ -78,52 +70,48 @@ V-Cuore/
 graph TD
   A["V-Cuore"]
 
-  A --> B["public"]
-  A --> C["src"]
+  A --> B["public/"]
+  A --> C["src/"]
   A --> D["config files"]
-  A --> E["dist"]
-  A --> F["node_modules"]
-
-  B --> B1["favicon.ico"]
-  B --> B2["favicon.svg"]
 
   C --> C1["App.tsx"]
   C --> C2["main.tsx"]
   C --> C3["index.css"]
-  C --> C4["api/index.ts"]
+  C --> C4["api/"]
   C --> C5["assets/"]
   C --> C6["components/"]
   C --> C7["constants/"]
-  C --> C8["hooks/index.ts"]
+  C --> C8["hooks/"]
   C --> C9["pages/"]
-  C --> C10["store/index.ts"]
-  C --> C11["types/index.ts"]
-  C --> C12["utils/index.ts"]
+  C --> C10["store/"]
+  C --> C11["types/"]
+  C --> C12["utils/"]
 
-  C5 --> C5A["cloud.svg"]
-  C5 --> C5B["ink-texture.png"]
+  C6 --> C6A["common/"]
+  C6 --> C6B["layout/"]
 
-  C6 --> C6A["common/index.ts"]
-  C6 --> C6B["elements/"]
-  C6 --> C6C["layout/"]
-  C6C --> C6C1["HamburgerMenu.tsx"]
-  C6C --> C6C2["Header.tsx"]
-  C6C --> C6C3["index.ts"]
+  C7 --> C7A["index.ts"]
+  C7 --> C7B["theme.ts"]
 
-  C7 --> C7A["Color.ts"]
-  C7 --> C7B["index.ts"]
+  C9 --> C9A["home/"]
+  C9 --> C9B["login/"]
+  C9 --> C9C["settings/"]
+  C9 --> C9D["Header.tsx"]
+  C9 --> C9E["HamburgerMenu.tsx"]
+  C9 --> C9F["index.ts"]
 
-  C9 --> C9A["index.ts"]
-  C9 --> C9B["Header.tsx"]
-  C9 --> C9C["home/HomePage.tsx"]
-  C9 --> C9D["home/index.tsx"]
-  C9 --> C9E["home/Microphone.tsx"]
-  C9 --> C9F["home/NanashiInk.tsx"]
-  C9 --> C9G["home/NeoPorte.tsx"]
-  C9 --> C9H["home/Rainbow.tsx"]
-  C9 --> C9I["home/Target.tsx"]
-  C9 --> C9J["login/LoginGate.tsx"]
-  C9 --> C9K["login/LoginPage.tsx"]
+  C9A --> C9A1["HomePage.tsx"]
+  C9A --> C9A2["Microphone.tsx"]
+  C9A --> C9A3["NanashiInk.tsx"]
+  C9A --> C9A4["NeoPorte.tsx"]
+  C9A --> C9A5["Rainbow.tsx"]
+  C9A --> C9A6["Target.tsx"]
+  C9A --> C9A7["index.tsx"]
+
+  C9B --> C9B1["LoginGate.tsx"]
+  C9B --> C9B2["LoginPage.tsx"]
+
+  C9C --> C9C1["SettingPage.tsx"]
 
   D --> D1["docker-compose.yml"]
   D --> D2["Dockerfile"]
@@ -132,7 +120,7 @@ graph TD
   D --> D5["postcss.config.js"]
   D --> D6["tsconfig.json"]
   D --> D7["package.json"]
-  D --> D8["package-lock.json"]
-  D --> D9["pnpm-lock.yaml"]
-  D --> D10["proxy.ts"]
+  D --> D8["pnpm-lock.yaml"]
+  D --> D9["proxy.ts"]
+  D --> D10["index.html"]
 ```
