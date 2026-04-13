@@ -17,7 +17,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
 
     return (
         <>
-            {/* 🛠️ バーガーアイコン：bg-oshi-primary で思想を同期 */}
+            {/* 🛠️ バーガーアイコン：色は oshi-primary に固定し、背景に関係なく視認性を確保 */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="relative z-150 w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer group"
@@ -27,19 +27,22 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
                 <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </button>
 
-            {/* 背景のぼかし */}
+            {/* 背景のぼかし：ダークモード時はより深い闇を演出 */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/5 backdrop-blur-sm z-130 transition-opacity duration-500"
+                    className="fixed inset-0 bg-black/20 dark:bg-black/60 backdrop-blur-sm z-130 transition-all duration-500"
                     onClick={() => setIsOpen(false)}
                 />
             )}
 
-            {/* 🚀 サイドメニュー：影の色も oshi-primary-20 に同期させて「どんより」を回避 */}
-            <nav className={`fixed top-0 right-0 h-full w-1/4 min-w-80 z-140 bg-white/80 backdrop-blur-3xl border-l border-white/40 transition-transform duration-500 ease-out shadow-[-20px_0_40px_-20px_var(--oshi-primary-20)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            {/* 🚀 サイドメニュー：
+                 bg-card-bg/90 (変数) に換装し、shadow を完全パージ。
+                 代わりに border-l-2 で境界を射抜くフラット戦略。 */}
+            <nav className={`fixed top-0 right-0 h-full w-1/4 min-w-80 z-140 bg-card-bg/90 backdrop-blur-3xl border-l-2 border-oshi-primary/10 transition-transform duration-500 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className="flex flex-col h-full pt-40 pb-12 px-8">
-                    {/* Command Menu タイトル： text-oshi-primary/60 で品格を出す */}
-                    <h2 className="text-10px font-black text-oshi-primary uppercase tracking-0.4em mb-10 pl-2 opacity-60">Command Menu</h2>
+                    
+                    {/* Command Menu タイトル：ダークモードでも品格を保つ */}
+                    <h2 className="text-10px font-black text-oshi-primary uppercase tracking-0.4em mb-10 pl-2 opacity-50">Command Menu</h2>
                     
                     <ul className="flex-1 space-y-4">
                         <MenuItem icon={<Home size={20}/>} label="HOME" onClick={() => setIsOpen(false)} />
@@ -52,12 +55,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
                         />
                     </ul>
 
-                    {/* 🚀 境界線：ピンクをパージし、薄い枠線へ */}
-                    <div className="pt-8 border-t border-oshi-primary-20">
+                    {/* 🚀 境界線：oshi-primary/10 でフラットな仕切り */}
+                    <div className="pt-8 border-t border-oshi-primary/10">
                         <MenuItem 
                             icon={<LogOut size={20}/>} 
                             label="LOGOUT" 
-                            color="text-slate-400 hover:text-red-500"
+                            color="text-slate-400 hover:text-red-500 transition-colors"
                             onClick={() => onLogoutClick && handleNavigate(onLogoutClick)}
                         />
                     </div>
@@ -67,9 +70,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
     );
 };
 
-// 🛰️ MenuItem：デフォルトカラーを text-oshi-primary に粛清
+// 🛰️ MenuItem：hover:bg-oshi-primary/10 で「選択の気配」を視覚化
 const MenuItem = ({ icon, label, onClick, color = "text-oshi-primary" }: { icon: React.ReactNode, label: string, onClick?: () => void, color?: string }) => (
-    <li onClick={onClick} className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all hover:bg-oshi-primary-20 group active:scale-95 select-none">
+    <li 
+        onClick={onClick} 
+        className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all hover:bg-oshi-primary/10 group active:scale-95 select-none"
+    >
         <div className={`${color} group-hover:scale-110 transition-transform duration-300`}>{icon}</div>
         <span className={`text-xs font-black tracking-widest ${color}`}>{label}</span>
     </li>
