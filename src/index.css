@@ -1,33 +1,37 @@
 /* src/index.css */
 @import "tailwindcss";
 
-:root {
-  /* ☀️ ライトモード：純白の戦場 */
-  --bg-main: #ffffff;
-  --bg-card: #ffffff;
-  --text-primary: var(--oshi-primary);
-  --text-muted: rgba(0, 0, 0, 0.4);
-  --border-color: rgba(0, 0, 0, 0.05);
-}
-
-.dark {
-  /* 🌙 ダークモード：漆黒の夜戦装備 */
-  --bg-main: #0d0d0d;        /* 🚀 真っ黒。これぞ深淵 */
-  --bg-card: #1a1a1a;        /* 少し浮き上がらせるためのグレー */
-  --text-primary: var(--oshi-primary); /* 推し色は発光体として維持 */
-  --text-muted: rgba(255, 255, 255, 0.4);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-
 @theme {
-  /* Tailwindクラスを CSS変数と同期 */
+  /* 🚀 Tailwind の色指定を CSS変数と直結 */
   --color-main-bg: var(--bg-main);
   --color-card-bg: var(--bg-card);
   --color-oshi-primary: var(--oshi-primary);
+  
+  /* 🛰️ その他の兵装 */
+  --color-text-muted: var(--text-muted);
+  --border-color: var(--border-border);
+}
+
+/* ☀️ ライトモード：初期装備 */
+:root {
+  --bg-main: #ffffff;
+  --bg-card: #ffffff;
+  --text-muted: rgba(0, 0, 0, 0.4);
+  --border-border: rgba(0, 0, 0, 0.05);
+}
+
+/* 🌙 ダークモード：夜戦装備 */
+/* 🚀 ポイント：.dark クラスが html または body に付与された瞬間に変数を差し替える */
+.dark {
+  --bg-main: #0d0d0d;
+  --bg-card: #000000;
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --border-border: rgba(255, 255, 255, 0.1);
 }
 
 body {
   background-color: var(--bg-main);
-  color: var(--text-primary);
+  color: var(--oshi-primary); /* 文字色はちみの設定した「推し色」を直撃 */
   transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
 }

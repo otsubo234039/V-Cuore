@@ -62,7 +62,7 @@ export const VspoTarget: React.FC<VspoTargetProps> = ({ viewMode }) => {
           </defs>
 
           {/* --- 背面：CHAMPIONの残光（文字も色を同期） --- */}
-          <g filter="url(#textGlowLite)" opacity="0.32" transform="translate(200, 200)">
+          <g filter="url(#textGlowLite)" opacity="0.5" transform="translate(200, 200)">
             <text
               x="0" y="0"
               fontSize="80"
@@ -72,7 +72,7 @@ export const VspoTarget: React.FC<VspoTargetProps> = ({ viewMode }) => {
               dominantBaseline="middle"
               // 🚀 粛清 3: テキストの色を同期。
               fill="var(--oshi-primary)"
-              fillOpacity="0.4"
+              fillOpacity="0.65"
               stroke="var(--oshi-primary)"
               strokeWidth="1.2"
               className="animate-pulse"

@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* 👤 ログイン/ユーザーボタン：背景も文字も同期 */}
         <button 
           onClick={onLoginClick}
-          className="relative p-2 rounded-full transition-all duration-300 active:scale-90 cursor-pointer text-oshi-primary bg-oshi-primary/10 hover:bg-oshi-primary/20"
+          className="relative p-2 rounded-full transition-all duration-300 active:scale-90 cursor-pointer text-oshi-primary bg-card-bg border border-oshi-primary/15 dark:border-oshi-primary/30 hover:bg-card-bg"
         >
           <User size={24} strokeWidth={3} />
           {isLoggedIn && (

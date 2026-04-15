@@ -20,7 +20,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
             {/* 🛠️ バーガーアイコン：色は oshi-primary に固定し、背景に関係なく視認性を確保 */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative z-150 w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer group"
+                className="relative z-150 w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer group bg-card-bg border border-oshi-primary/15 dark:border-oshi-primary/30 rounded-full transition-colors"
             >
                 <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
                 <span className={`w-4 h-0.5 bg-oshi-primary self-end mr-1 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} />
@@ -38,7 +38,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
             {/* 🚀 サイドメニュー：
                  bg-card-bg/90 (変数) に換装し、shadow を完全パージ。
                  代わりに border-l-2 で境界を射抜くフラット戦略。 */}
-            <nav className={`fixed top-0 right-0 h-full w-1/4 min-w-80 z-140 bg-card-bg/90 backdrop-blur-3xl border-l-2 border-oshi-primary/10 transition-transform duration-500 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <nav className={`fixed top-0 right-0 h-full w-1/4 min-w-80 z-140 bg-card-bg backdrop-blur-3xl border-l-2 border-oshi-primary/10 transition-transform duration-500 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className="flex flex-col h-full pt-40 pb-12 px-8">
                     
                     {/* Command Menu タイトル：ダークモードでも品格を保つ */}
@@ -74,7 +74,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
 const MenuItem = ({ icon, label, onClick, color = "text-oshi-primary" }: { icon: React.ReactNode, label: string, onClick?: () => void, color?: string }) => (
     <li 
         onClick={onClick} 
-        className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all hover:bg-oshi-primary/10 group active:scale-95 select-none"
+        className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all bg-card-bg hover:bg-oshi-primary/10 group active:scale-95 select-none"
     >
         <div className={`${color} group-hover:scale-110 transition-transform duration-300`}>{icon}</div>
         <span className={`text-xs font-black tracking-widest ${color}`}>{label}</span>

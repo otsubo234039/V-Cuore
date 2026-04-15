@@ -10,8 +10,8 @@ export const NeoPorte: React.FC<NeoPorteProps> = ({ viewMode }) => {
   return (
     <div className={`absolute flex items-center justify-center transition-all duration-1000 pointer-events-none overflow-visible z-[-1] ${
       viewMode === 'web' 
-        ? 'w-[40%] aspect-square top-[4%] right-[2%] opacity-60' 
-        : 'w-[60%] aspect-square top-[18%] right-[2%] opacity-70'
+        ? 'w-[40%] aspect-square top-[4%] right-[2%] opacity-85' 
+        : 'w-[60%] aspect-square top-[18%] right-[2%] opacity-90'
     }`}>
       
       {/* 1. ポータルの基底：bg-oshi-primary-20 を活用 */}

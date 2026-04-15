@@ -67,7 +67,7 @@ export const Rainbow: React.FC<Props> = ({ viewMode }) => {
         </g>
 
         {/* --- 前面：データクラウド（雲の色も同期） --- */}
-        <g opacity="0.4" className="animate-cloud-float" transform="translate(80, 160)">
+        <g opacity="0.62" className="animate-cloud-float" transform="translate(80, 160)">
           <path 
             d="M 0,40 Q 20,0 60,20 Q 100,-10 140,30 Q 180,10 200,50 L 0,50 Z" 
             // 🚀 粛清 3: 雲も var(--oshi-primary) に換装

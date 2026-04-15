@@ -4,6 +4,15 @@ import './index.css'
 import App from './App'
 import { Amplify } from 'aws-amplify';
 
+const savedTheme = localStorage.getItem('v-cuore-theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+  document.documentElement.classList.add('dark');
+} else {
+  document.documentElement.classList.remove('dark');
+}
+
 // 🛰️ 司令部を起動する前に、AWS Cognito との「同期（V-SYNC）」を完了させる
 Amplify.configure({
   Auth: {
