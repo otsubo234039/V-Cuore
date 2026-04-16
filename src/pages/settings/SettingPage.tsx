@@ -1,9 +1,11 @@
 // src/pages/settings/SettingsPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, User, Palette, Link as LinkIcon, ExternalLink, BookOpen, ShieldCheck, Sun, Moon } from 'lucide-react';
 
 interface SettingsPageProps {
     initialColor: string;
+    isDark: boolean;
+    onToggleTheme: () => void;
     onBack: () => void;
     onApplyColor: (color: string) => void;
     onUserClick?: () => void;
@@ -12,27 +14,14 @@ interface SettingsPageProps {
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({ 
     initialColor, 
+    isDark,
+    onToggleTheme,
     onBack, 
     onApplyColor, 
     onUserClick, 
     onLogout 
 }) => {
     const [customColor, setCustomColor] = useState(initialColor);
-    // 🌙 テーマ状態の同期
-    const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
-
-    // 🚀 環境制御（テーマ切り替え）ロジック
-    const toggleTheme = () => {
-        const newDark = !isDark;
-        setIsDark(newDark);
-        if (newDark) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('v-cuore-theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('v-cuore-theme', 'light');
-        }
-    };
 
     const getSafeColor = (color: string) => {
         if (!color) return 'transparent';
@@ -87,7 +76,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">夜戦装備への換装 / 視認性確保</p>
                             </div>
                             <button 
-                                onClick={toggleTheme}
+                                onClick={onToggleTheme}
                                 className="relative w-16 h-8 bg-oshi-primary/20 rounded-full flex items-center p-1 transition-all cursor-pointer group"
                             >
                                 <div className={`w-6 h-6 bg-white rounded-full flex items-center justify-center text-oshi-primary transition-all duration-500 transform ${isDark ? 'translate-x-8' : 'translate-x-0'}`}>

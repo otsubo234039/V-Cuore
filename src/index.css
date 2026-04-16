@@ -23,7 +23,7 @@
 /* 🌙 ダークモード：夜戦装備 */
 /* 🚀 ポイント：.dark クラスが html または body に付与された瞬間に変数を差し替える */
 .dark {
-  --bg-main: #0d0d0d;
+  --bg-main: #000000;
   --bg-card: #000000;
   --text-muted: rgba(255, 255, 255, 0.4);
   --border-border: rgba(255, 255, 255, 0.1);

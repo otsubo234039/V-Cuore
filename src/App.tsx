@@ -5,14 +5,24 @@ import { Hub } from 'aws-amplify/utils';
 import HomePage from './pages/home/HomePage';
 import { LoginPage } from './pages/login/LoginPage';
 import { SettingsPage } from './pages/settings/SettingPage';
-import { StudySetupPage, type StudyConfig } from './pages/Study/StudySetupPage';
-import { THEME_CONFIG, toSafeHex } from './constants/theme';
+import { StudySetupPage, type StudyConfig } from './pages/StudySetup/StudySetupPage';
+import { StudyPage } from './pages/Study/StudyPage';
+import ResultPage from './pages/Result/ResultPage';
+import { THEME_CONFIG, toReadableHex } from './constants/theme';
+
+type SettingsOrigin = 'home' | 'setup' | 'study' | 'login';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => document.documentElement.classList.contains('dark'));
   const [isSetupVisible, setIsSetupVisible] = useState(false); // 🚀 セットアップ画面フラグ
+  const [isStudyVisible, setIsStudyVisible] = useState(false); // 🚀 学習画面フラグ
+  const [isResultVisible, setIsResultVisible] = useState(false);
+  const [lastScore, setLastScore] = useState(0);
+  const [lastTotalQuestions, setLastTotalQuestions] = useState(0);
+  const [settingsOrigin, setSettingsOrigin] = useState<SettingsOrigin>('home');
 
   // 🚀 試験タイトル管理（ハンバーガーメニュー等から変更される想定）
   const [selectedExam, setSelectedExam] = useState("AWS Certified SAA");
@@ -21,11 +31,26 @@ function App() {
   useEffect(() => {
     checkUserStatus();
 
-    const validColor = toSafeHex(themeColor);
-    const root = document.documentElement;
+    const applyThemeColor = () => {
+      const root = document.documentElement;
+      const isDarkMode = root.classList.contains('dark');
+      const readableColor = toReadableHex(themeColor, isDarkMode);
 
-    root.style.setProperty('--oshi-primary', validColor);
-    root.style.setProperty('--oshi-primary-20', `${validColor}${THEME_CONFIG.ALPHA_20}`);
+      root.style.setProperty('--oshi-primary', readableColor);
+      root.style.setProperty('--oshi-primary-20', `${readableColor}${THEME_CONFIG.ALPHA_20}`);
+    };
+
+    applyThemeColor();
+
+    const observer = new MutationObserver((mutations) => {
+      const classChanged = mutations.some((mutation) => mutation.attributeName === 'class');
+      if (classChanged) {
+        setIsDarkMode(document.documentElement.classList.contains('dark'));
+        applyThemeColor();
+      }
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     const unsubscribe = Hub.listen('auth', ({ payload }) => {
       switch (payload.event) {
@@ -38,7 +63,10 @@ function App() {
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      observer.disconnect();
+      unsubscribe();
+    };
   }, [themeColor]);
 
   const checkUserStatus = async () => {
@@ -51,15 +79,60 @@ function App() {
     }
   };
 
+  const openSettingsFrom = (origin: SettingsOrigin) => {
+    setSettingsOrigin(origin);
+    setIsSettingsVisible(true);
+    setIsLoginVisible(false);
+    setIsSetupVisible(false);
+    setIsStudyVisible(false);
+    setIsResultVisible(false);
+  };
+
+  const closeSettingsToOrigin = () => {
+    setIsSettingsVisible(false);
+
+    switch (settingsOrigin) {
+      case 'setup':
+        setIsSetupVisible(true);
+        break;
+      case 'study':
+        setIsStudyVisible(true);
+        break;
+      case 'login':
+        setIsLoginVisible(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleApplyColor = (newColor: string) => {
     setThemeColor(newColor);
-    setIsSettingsVisible(false);
+    closeSettingsToOrigin();
+  };
+
+  const handleToggleTheme = () => {
+    const root = document.documentElement;
+    const nextIsDark = !root.classList.contains('dark');
+
+    root.classList.toggle('dark', nextIsDark);
+    localStorage.setItem('v-cuore-theme', nextIsDark ? 'dark' : 'light');
+    setIsDarkMode(nextIsDark);
   };
 
   // 🚀 ミッション開始時の最終処理
   const handleStartMission = (config: StudyConfig) => {
     console.log("ミッション開始承認:", config);
-    // ここで実際に演習画面へ遷移する（次なる開発フェーズ）
+    setIsSetupVisible(false);
+    setIsStudyVisible(true);
+  };
+
+  const handleFinishStudy = (score: number, totalQuestions: number) => {
+    setLastScore(score);
+    setLastTotalQuestions(totalQuestions);
+    setIsResultVisible(true);
+    setIsStudyVisible(false);
+    setIsSetupVisible(false);
   };
 
   return (
@@ -69,7 +142,9 @@ function App() {
       {isSettingsVisible ? (
         <SettingsPage
           initialColor={themeColor}
-          onBack={() => setIsSettingsVisible(false)}
+          isDark={isDarkMode}
+          onToggleTheme={handleToggleTheme}
+          onBack={closeSettingsToOrigin}
           onApplyColor={handleApplyColor}
         />
       ) : isLoginVisible ? (
@@ -79,13 +154,37 @@ function App() {
         <StudySetupPage
           examTitle={selectedExam}
           onBack={() => setIsSetupVisible(false)}
-          onStartDuel={handleStartMission}
+          onStartMission={handleStartMission}
+          onSettingsClick={() => openSettingsFrom('setup')}
+        />
+      ) : isStudyVisible ? (
+        <StudyPage
+          onBack={() => {
+            setIsStudyVisible(false);
+            setIsSetupVisible(true);
+          }}
+          onFinish={handleFinishStudy}
+        />
+      ) : isResultVisible ? (
+        <ResultPage
+          score={lastScore}
+          totalQuestions={lastTotalQuestions}
+          onRestart={() => {
+            setIsResultVisible(false);
+            setIsStudyVisible(false);
+            setIsSetupVisible(true);
+          }}
+          onGoHome={() => {
+            setIsResultVisible(false);
+            setIsSetupVisible(false);
+            setIsStudyVisible(false);
+          }}
         />
       ) : (
         <HomePage
           isLoggedIn={isLoggedIn}
           onLoginClick={() => setIsLoginVisible(true)}
-          onSettingsClick={() => setIsSettingsVisible(true)}
+          onSettingsClick={() => openSettingsFrom('home')}
           onStartClick={() => setIsSetupVisible(true)}
         />
       )}

@@ -1,14 +1,32 @@
 // src/components/layout/HamburgerMenu.tsx
 import React, { useState } from 'react';
-import { Settings, Home, BookOpen, Cloud, LogOut } from 'lucide-react';
+import { Settings, BookOpen, Cloud, LogOut } from 'lucide-react';
 
 interface HamburgerMenuProps {
     onSettingsClick: () => void;
     onLogoutClick?: () => void;
+    isOpen?: boolean;
+    onOpenChange?: (isOpen: boolean) => void;
+    hideTrigger?: boolean;
 }
 
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, onLogoutClick }) => {
-    const [isOpen, setIsOpen] = useState(false);
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
+    onSettingsClick,
+    onLogoutClick,
+    isOpen: controlledIsOpen,
+    onOpenChange,
+    hideTrigger = false,
+}) => {
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
+    const isOpen = controlledIsOpen ?? internalIsOpen;
+
+    const setIsOpen = (nextIsOpen: boolean) => {
+        if (onOpenChange) {
+            onOpenChange(nextIsOpen);
+            return;
+        }
+        setInternalIsOpen(nextIsOpen);
+    };
 
     const handleNavigate = (action: () => void) => {
         setIsOpen(false);
@@ -18,14 +36,16 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
     return (
         <>
             {/* 🛠️ バーガーアイコン：色は oshi-primary に固定し、背景に関係なく視認性を確保 */}
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="relative z-150 w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer group bg-card-bg border border-oshi-primary/15 dark:border-oshi-primary/30 rounded-full transition-colors"
-            >
-                <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
-                <span className={`w-4 h-0.5 bg-oshi-primary self-end mr-1 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} />
-                <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-            </button>
+            {!hideTrigger && (
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="relative z-150 w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none cursor-pointer group bg-card-bg border border-oshi-primary/15 dark:border-oshi-primary/30 rounded-full transition-colors"
+                >
+                    <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
+                    <span className={`w-4 h-0.5 bg-oshi-primary self-end mr-1 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} />
+                    <span className={`w-6 h-0.5 bg-oshi-primary transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+                </button>
+            )}
 
             {/* 背景のぼかし：ダークモード時はより深い闇を演出 */}
             {isOpen && (
@@ -45,7 +65,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onSettingsClick, o
                     <h2 className="text-10px font-black text-oshi-primary uppercase tracking-0.4em mb-10 pl-2 opacity-50">Command Menu</h2>
                     
                     <ul className="flex-1 space-y-4">
-                        <MenuItem icon={<Home size={20}/>} label="HOME" onClick={() => setIsOpen(false)} />
                         <MenuItem icon={<BookOpen size={20}/>} label="STUDY LOG" />
                         <MenuItem icon={<Cloud size={20}/>} label="AWS SETTING" />
                         <MenuItem 
