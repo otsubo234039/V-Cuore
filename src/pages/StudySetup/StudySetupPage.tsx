@@ -4,7 +4,6 @@ import { Play, Cpu, History, AlertCircle, Cloud, ChevronDown, Menu } from 'lucid
 import { HamburgerMenu } from '../HamburgerMenu';
 
 interface StudySetupPageProps {
-  examTitle: string; 
   onBack: () => void;
   onStartMission: (config: StudyConfig) => void;
   onSettingsClick: () => void;
@@ -85,7 +84,7 @@ function CuteSelect<T extends string | number>({ value, options, onChange }: Cut
   );
 }
 
-export const StudySetupPage: React.FC<StudySetupPageProps> = ({ examTitle, onBack, onStartMission, onSettingsClick }) => {
+export const StudySetupPage: React.FC<StudySetupPageProps> = ({ onBack, onStartMission, onSettingsClick }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [config, setConfig] = useState<StudyConfig>({
     selectedExam: "Solutions Architect - Associate", 
@@ -118,7 +117,7 @@ export const StudySetupPage: React.FC<StudySetupPageProps> = ({ examTitle, onBac
         {/* 左翼：ホームロゴ遷移 */}
         <button 
           onClick={onBack} 
-          className="flex items-baseline gap-2 p-2 bg-transparent border-none cursor-default"
+          className="flex items-baseline gap-2 p-2 bg-transparent border-none cursor-pointer"
         >
           <h1 className="text-xl font-black text-oshi-primary italic tracking-tighter transition-colors duration-1000">
             V-CUORE

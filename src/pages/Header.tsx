@@ -5,8 +5,6 @@ import { User } from 'lucide-react';
 import { HamburgerMenu } from './HamburgerMenu'; // パスは適宜合わせてな
 
 interface HeaderProps {
-  viewMode: 'web' | 'mobile';
-  setViewMode: (mode: 'web' | 'mobile') => void;
   isLoggedIn: boolean;     
   onLoginClick: () => void; 
   onSettingsClick: () => void; 
@@ -18,7 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSettingsClick 
 }) => {
   return (
-    <header className="relative z-100 w-full px-[5%] py-6 flex justify-between items-center select-none">
+    <header className="relative z-[100] w-full px-[5%] py-6 flex justify-between items-center select-none">
       <div className="flex items-baseline gap-2">
         {/* 🚀 粛清：テキスト色を oshi-primary に同期。これで #BE2100 が直撃する */}
         <h1 className="text-xl font-black text-oshi-primary italic tracking-tighter transition-colors duration-1000">

@@ -11,6 +11,7 @@ import ResultPage from './pages/Result/ResultPage';
 import { THEME_CONFIG, toReadableHex } from './constants/theme';
 
 type SettingsOrigin = 'home' | 'setup' | 'study' | 'login';
+type StudyOrigin = 'setup' | 'demo';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,12 +21,12 @@ function App() {
   const [isSetupVisible, setIsSetupVisible] = useState(false); // 🚀 セットアップ画面フラグ
   const [isStudyVisible, setIsStudyVisible] = useState(false); // 🚀 学習画面フラグ
   const [isResultVisible, setIsResultVisible] = useState(false);
+  const [studyInitialIndex, setStudyInitialIndex] = useState(0);
+  const [studyOrigin, setStudyOrigin] = useState<StudyOrigin>('setup');
   const [lastScore, setLastScore] = useState(0);
   const [lastTotalQuestions, setLastTotalQuestions] = useState(0);
   const [settingsOrigin, setSettingsOrigin] = useState<SettingsOrigin>('home');
 
-  // 🚀 試験タイトル管理（ハンバーガーメニュー等から変更される想定）
-  const [selectedExam, setSelectedExam] = useState("AWS Certified SAA");
   const [themeColor, setThemeColor] = useState<string>(THEME_CONFIG.DEFAULT_COLOR);
 
   useEffect(() => {
@@ -111,6 +112,15 @@ function App() {
     closeSettingsToOrigin();
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsSettingsVisible(false);
+    setIsSetupVisible(false);
+    setIsStudyVisible(false);
+    setIsResultVisible(false);
+    setIsLoginVisible(true);
+  };
+
   const handleToggleTheme = () => {
     const root = document.documentElement;
     const nextIsDark = !root.classList.contains('dark');
@@ -122,8 +132,18 @@ function App() {
 
   // 🚀 ミッション開始時の最終処理
   const handleStartMission = (config: StudyConfig) => {
-    console.log("ミッション開始承認:", config);
+    void config;
+    setStudyOrigin('setup');
+    setStudyInitialIndex(0);
     setIsSetupVisible(false);
+    setIsStudyVisible(true);
+  };
+
+  const handleStartFromWeakness = (questionIndex: number) => {
+    setStudyOrigin('demo');
+    setStudyInitialIndex(questionIndex);
+    setIsSetupVisible(false);
+    setIsResultVisible(false);
     setIsStudyVisible(true);
   };
 
@@ -146,22 +166,26 @@ function App() {
           onToggleTheme={handleToggleTheme}
           onBack={closeSettingsToOrigin}
           onApplyColor={handleApplyColor}
+          onLogout={handleLogout}
         />
       ) : isLoginVisible ? (
         <LoginPage onBack={() => setIsLoginVisible(false)} />
       ) : isSetupVisible ? (
         /* 🚀 介入：StudySetupPage へ試験名と撤退用関数を渡す */
         <StudySetupPage
-          examTitle={selectedExam}
           onBack={() => setIsSetupVisible(false)}
           onStartMission={handleStartMission}
           onSettingsClick={() => openSettingsFrom('setup')}
         />
       ) : isStudyVisible ? (
         <StudyPage
+          initialQuestionIndex={studyInitialIndex}
+          studyMode={studyOrigin === 'demo' ? 'demo' : 'full'}
           onBack={() => {
             setIsStudyVisible(false);
-            setIsSetupVisible(true);
+            if (studyOrigin === 'setup') {
+              setIsSetupVisible(true);
+            }
           }}
           onFinish={handleFinishStudy}
         />
@@ -186,6 +210,7 @@ function App() {
           onLoginClick={() => setIsLoginVisible(true)}
           onSettingsClick={() => openSettingsFrom('home')}
           onStartClick={() => setIsSetupVisible(true)}
+          onWeaknessClick={handleStartFromWeakness}
         />
       )}
     </div>

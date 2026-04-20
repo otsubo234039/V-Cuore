@@ -11,7 +11,6 @@ interface LoginPageProps {
 export const LoginPage: React.FC<LoginPageProps> = ({ onBack }) => {
   
   const handleAuth = async (provider: string) => {
-    console.log(`[V-SYNC] Initiating ${provider} authentication protocol...`);
     try {
       if (provider === 'Google') {
         await signInWithRedirect({ provider: 'Google' });
@@ -22,12 +21,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBack }) => {
         });
       }
     } catch (error) {
-      console.error("[V-SYNC ERROR] ゲート展開に失敗:", error);
+      console.error('ゲート展開に失敗:', error);
     }
   };
 
   return (
-    <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-linear-to-br from-white via-oshi-primary-20 to-white z-100">
+    <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-linear-to-br from-white via-[var(--oshi-primary-20)] to-white z-[100]">
       
       {/* 📡 背景：干渉防止 */}
       <div className="absolute inset-0 pointer-events-none opacity-40 z-0">
@@ -35,7 +34,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onBack }) => {
         <div className="absolute bottom-[-10%] right-[-5%] w-[40%] aspect-square bg-oshi-primary/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="relative z-10 w-[90%] max-w-105 bg-white/60 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/60 shadow-2xl">
+      <div className="relative z-10 w-[90%] max-w-[420px] bg-white/60 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/60 shadow-2xl">
         
         <div className="text-center mb-10">
           <h2 className="text-[10px] font-black text-oshi-primary uppercase tracking-[0.4em] mb-2">Security Protocol</h2>

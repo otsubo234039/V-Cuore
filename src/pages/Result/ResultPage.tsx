@@ -9,7 +9,8 @@ interface StudyResultPageProps {
 }
 
 const StudyResultPage: React.FC<StudyResultPageProps> = ({ score, totalQuestions, onRestart, onGoHome }) => {
-  const percentage = Math.round((score / totalQuestions) * 100);
+  const safeTotalQuestions = Math.max(1, totalQuestions);
+  const percentage = Math.round((score / safeTotalQuestions) * 100);
   
   // スコアに基づいた評価ラベル
   const getGrade = (p: number) => {
