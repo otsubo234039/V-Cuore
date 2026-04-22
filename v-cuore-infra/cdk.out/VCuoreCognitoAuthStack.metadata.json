@@ -1,0 +1,50 @@
+{
+  "/VCuoreCognitoAuthStack/UserPoolId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolId"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/UserPoolClientId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolClientId"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/VCuoreUserPool/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserPool784A32A5"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/CDKMetadata/Condition": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadataAvailable"
+    }
+  ],
+  "/VCuoreCognitoAuthStack/VCuoreUserPool/VCuoreUserPoolClient/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserPoolVCuoreUserPoolClient18F9F8E0"
+    }
+  ]
+}

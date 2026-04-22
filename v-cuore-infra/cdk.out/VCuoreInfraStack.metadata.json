@@ -1,0 +1,50 @@
+{
+  "/VCuoreInfraStack/UserPoolId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolId"
+    }
+  ],
+  "/VCuoreInfraStack/UserPoolClientId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolClientId"
+    }
+  ],
+  "/VCuoreInfraStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/VCuoreInfraStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreUserPool/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserPool784A32A5"
+    }
+  ],
+  "/VCuoreInfraStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/VCuoreInfraStack/CDKMetadata/Condition": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadataAvailable"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreUserPool/VCuoreUserPoolClient/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserPoolVCuoreUserPoolClient18F9F8E0"
+    }
+  ]
+}

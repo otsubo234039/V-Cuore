@@ -1,0 +1,20 @@
+{
+  "version": "53.0.0",
+  "files": {
+    "634639aafee1302614ccc944f16ba3bac0b6ad6086d28d070d933a2a0d768a72": {
+      "displayName": "VCuoreCognitoAuthStack Template",
+      "source": {
+        "path": "VCuoreCognitoAuthStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region-3ffe7297": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "634639aafee1302614ccc944f16ba3bac0b6ad6086d28d070d933a2a0d768a72.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

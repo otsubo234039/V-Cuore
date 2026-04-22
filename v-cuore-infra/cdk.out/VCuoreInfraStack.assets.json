@@ -1,0 +1,20 @@
+{
+  "version": "53.0.0",
+  "files": {
+    "2ba7d31abf2c37015d4dd37a0561f09f26b831a60fe5082028d15b502a9d2c20": {
+      "displayName": "VCuoreInfraStack Template",
+      "source": {
+        "path": "VCuoreInfraStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region-f03606b3": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "2ba7d31abf2c37015d4dd37a0561f09f26b831a60fe5082028d15b502a9d2c20.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
