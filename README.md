@@ -49,12 +49,32 @@ pnpm install
 pnpm dev
 ```
 
+認証設定は `.env` から読み込む方式です。初回は以下を実行:
+
+```bash
+cp .env.example .env
+```
+
+`.env` の各値は Cognito の設定値に合わせて更新してください。
+
 本番ビルドとプレビュー:
 
 ```bash
 npm run build
 npm run preview
 ```
+
+## 🔐 Cognito (CDK) 運用メモ
+
+`v-cuore-infra` は Hosted UI + OAuth Code Grant 前提で構成しています。以下の例のようにコンテキストを渡してデプロイしてください。
+
+```bash
+cd v-cuore-infra
+npm install
+npm run deploy -- -c domainPrefix=v-cuore-dev-auth -c callbackUrls=http://localhost:5173/ -c logoutUrls=http://localhost:5173/
+```
+
+デプロイ後に出力される `UserPoolId` / `UserPoolClientId` / `HostedUiDomain` をフロント側 `.env` に反映すると、AWS 側設定と同期できます。
 
 ## 📈 ロードマップ
 - [ ] 各VTuber事務所カラーへの一括テーマ切り替え機能

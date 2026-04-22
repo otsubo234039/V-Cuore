@@ -17,22 +17,20 @@ if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: 'ap-southeast-2_Sm8EPStga',
-      userPoolClientId: '3jvtpp8872fqq61b7oroh5mpr9',
+      userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID,
+      userPoolClientId: import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID,
       loginWith: {
-        email: true, // ✅ これを足して認証基盤を安定させる
+        email: true,
         oauth: {
-          // https:// は抜きのドメイン名
-          domain: 'ap-southeast-2sm8epstga.auth.ap-southeast-2.amazoncognito.com', 
+          domain: import.meta.env.VITE_COGNITO_DOMAIN,
           scopes: ['openid', 'email', 'profile'],
-          // ⚠️ AWSコンソールの設定と「1文字（最後の/まで）」寸分違わず合わせるんやぞ
-          redirectSignIn: ['http://localhost:5173/'],
-          redirectSignOut: ['http://localhost:5173/'],
+          redirectSignIn: [import.meta.env.VITE_COGNITO_REDIRECT_SIGN_IN],
+          redirectSignOut: [import.meta.env.VITE_COGNITO_REDIRECT_SIGN_OUT],
           responseType: 'code',
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });
 
 createRoot(document.getElementById('root')!).render(

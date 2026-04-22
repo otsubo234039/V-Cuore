@@ -11,6 +11,24 @@
       "data": "UserPoolClientId"
     }
   ],
+  "/VCuoreInfraStack/HostedUiDomain": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "HostedUiDomain"
+    }
+  ],
+  "/VCuoreInfraStack/CallbackUrls": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CallbackUrls"
+    }
+  ],
+  "/VCuoreInfraStack/LogoutUrls": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogoutUrls"
+    }
+  ],
   "/VCuoreInfraStack/BootstrapVersion": [
     {
       "type": "aws:cdk:logicalId",
@@ -45,6 +63,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "VCuoreUserPoolVCuoreUserPoolClient18F9F8E0"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreUserPool/VCuoreHostedUiDomain/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserPoolVCuoreHostedUiDomainC4D62118"
     }
   ]
 }

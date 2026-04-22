@@ -53,25 +53,26 @@
    "Type": "AWS::Cognito::UserPoolClient",
    "Properties": {
     "AllowedOAuthFlows": [
-     "implicit",
      "code"
     ],
     "AllowedOAuthFlowsUserPoolClient": true,
     "AllowedOAuthScopes": [
-     "profile",
-     "phone",
-     "email",
      "openid",
-     "aws.cognito.signin.user.admin"
+     "email",
+     "profile"
     ],
     "CallbackURLs": [
-     "https://example.com"
+     "https://v-cuore.app/callback"
     ],
     "ExplicitAuthFlows": [
      "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
      "ALLOW_REFRESH_TOKEN_AUTH"
     ],
     "GenerateSecret": false,
+    "LogoutURLs": [
+     "http://localhost:5173/"
+    ],
     "SupportedIdentityProviders": [
      "COGNITO"
     ],
@@ -83,10 +84,22 @@
     "aws:cdk:path": "VCuoreInfraStack/VCuoreUserPool/VCuoreUserPoolClient/Resource"
    }
   },
+  "VCuoreUserPoolVCuoreHostedUiDomainC4D62118": {
+   "Type": "AWS::Cognito::UserPoolDomain",
+   "Properties": {
+    "Domain": "v-cuore-auth-c8dad7ddc29058ccac6f1ef5619b34d36fb9d1b3e2",
+    "UserPoolId": {
+     "Ref": "VCuoreUserPool784A32A5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreUserPool/VCuoreHostedUiDomain/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02JQQrCMBAA39J7ssYFX9AHKIpniWmUbeOudDf2UPp3kaJ4mmEGAXcBQhMn9akbfKErzCeLaXBx0kuSO5MJzGfN40GkuPbGP/9KWyiz/a+1LJ+0r/astjiWLkOvmxci4BZC0yuRHysbPTIcV74BPYxBjY8AAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02KzQrCMBCEn6X3ZI0B8QHqXVE8S0yjbJvuSrOxh9J3F+kPPc0334wFezBgCtcn7atGR3zCcBPnG+X69PD8JhSG4Z5Cd2GOqnzRyguUEQPJdprNUk/cOqTtYTLjX52zfLKMirgKUKfd11rYH8EUdULUXSbBNsB1yh8Qr9NnsAAAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "VCuoreInfraStack/CDKMetadata/Default"
@@ -111,6 +124,29 @@
    },
    "Export": {
     "Name": "VCuoreUserPoolClientId"
+   }
+  },
+  "HostedUiDomain": {
+   "Description": "Hosted UI domain for Cognito OAuth.",
+   "Value": {
+    "Ref": "VCuoreUserPoolVCuoreHostedUiDomainC4D62118"
+   },
+   "Export": {
+    "Name": "VCuoreHostedUiDomain"
+   }
+  },
+  "CallbackUrls": {
+   "Description": "Configured OAuth callback URLs.",
+   "Value": "https://v-cuore.app/callback",
+   "Export": {
+    "Name": "VCuoreCallbackUrls"
+   }
+  },
+  "LogoutUrls": {
+   "Description": "Configured OAuth logout URLs.",
+   "Value": "http://localhost:5173/",
+   "Export": {
+    "Name": "VCuoreLogoutUrls"
    }
   }
  },
