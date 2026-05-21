@@ -1,17 +1,18 @@
 {
   "version": "53.0.0",
   "files": {
-    "216cbf020350b3ca4519fff5b796a3c8ac8b0cfde51cb0bf0ec5c4de6f1d5edd": {
+    "0cd725bc6fe8fe76c9907f5ad8e13ee174cb249016aa2a5160e44508f61b550b": {
       "displayName": "VCuoreInfraStack Template",
       "source": {
         "path": "VCuoreInfraStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region-c63cfe5f": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "216cbf020350b3ca4519fff5b796a3c8ac8b0cfde51cb0bf0ec5c4de6f1d5edd.json",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        "743107202624-ap-northeast-3-b4305c5b": {
+          "bucketName": "cdk-hnb659fds-assets-743107202624-ap-northeast-3",
+          "objectKey": "0cd725bc6fe8fe76c9907f5ad8e13ee174cb249016aa2a5160e44508f61b550b.json",
+          "region": "ap-northeast-3",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::743107202624:role/cdk-hnb659fds-file-publishing-role-743107202624-ap-northeast-3"
         }
       }
     }

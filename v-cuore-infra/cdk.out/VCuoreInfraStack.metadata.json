@@ -53,12 +53,6 @@
       "data": "CDKMetadata"
     }
   ],
-  "/VCuoreInfraStack/CDKMetadata/Condition": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "CDKMetadataAvailable"
-    }
-  ],
   "/VCuoreInfraStack/VCuoreUserPool/VCuoreUserPoolClient/Resource": [
     {
       "type": "aws:cdk:logicalId",
