@@ -5,8 +5,8 @@ import { Construct } from 'constructs';
 export class CognitoAuthStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
-
-    const userPool = new cognito.UserPool(this, 'VCuoreUserPool', {
+    try {
+      const userPool = new cognito.UserPool(this, 'VCuoreUserPool', {
       signInAliases: {
         email: true,
       },
@@ -40,5 +40,9 @@ export class CognitoAuthStack extends Stack {
       exportName: 'VCuoreUserPoolClientId',
       description: 'User Pool Client ID for the V-CUORE frontend.',
     });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      throw new Error(`[CognitoAuthStack] ${msg}`);
+    }
   }
 }

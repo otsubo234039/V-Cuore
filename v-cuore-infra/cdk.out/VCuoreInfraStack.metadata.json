@@ -17,6 +17,12 @@
       "data": "HostedUiDomain"
     }
   ],
+  "/VCuoreInfraStack/ApiEndpoint": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiEndpoint"
+    }
+  ],
   "/VCuoreInfraStack/CallbackUrls": [
     {
       "type": "aws:cdk:logicalId",
@@ -47,6 +53,42 @@
       "data": "VCuoreUserPool784A32A5"
     }
   ],
+  "/VCuoreInfraStack/VCuoreChatHistory/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreChatHistory7AA3B89C"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreUserProgress/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreUserProgress702BF7AE"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreChatHandlerFallback/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreChatHandlerFallback8539F2F0"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApi293CA95A"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Account": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiAccount37536741"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Endpoint": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiEndpoint01EE28BE"
+    }
+  ],
   "/VCuoreInfraStack/CDKMetadata/Default": [
     {
       "type": "aws:cdk:logicalId",
@@ -63,6 +105,72 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "VCuoreUserPoolVCuoreHostedUiDomainC4D62118"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreChatHandlerFallback/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreChatHandlerFallbackServiceRole49F860DC"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/CloudWatchRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiCloudWatchRoleDBFE656A"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Deployment/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiDeployment27E60D116293cff3b0ac8d92e9d2d584982f3d96"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/DeploymentStage.prod/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiDeploymentStageprodDE6B858E"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreChatHandlerFallback/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreChatHandlerFallbackServiceRoleDefaultPolicy98124601"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApiOPTIONS9CE7DC8E"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/chat/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApichat66E0F4B1"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/chat/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApichatOPTIONS8644293B"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/ApiPermission.VCuoreInfraStackVCuoreRestApi67114483.POST..chat": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApichatPOSTApiPermissionVCuoreInfraStackVCuoreRestApi67114483POSTchat77503134"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/ApiPermission.Test.VCuoreInfraStackVCuoreRestApi67114483.POST..chat": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApichatPOSTApiPermissionTestVCuoreInfraStackVCuoreRestApi67114483POSTchat34643798"
+    }
+  ],
+  "/VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VCuoreRestApichatPOSTB11BF0BA"
     }
   ]
 }

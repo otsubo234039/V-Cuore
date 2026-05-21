@@ -87,7 +87,7 @@
   "VCuoreUserPoolVCuoreHostedUiDomainC4D62118": {
    "Type": "AWS::Cognito::UserPoolDomain",
    "Properties": {
-    "Domain": "v-cuore-auth",
+    "Domain": "v-cuore-auth-c8dad7ddc29058ccac6f1ef5619b34d36fb9d1b3e2",
     "UserPoolId": {
      "Ref": "VCuoreUserPool784A32A5"
     }
@@ -96,10 +96,556 @@
     "aws:cdk:path": "VCuoreInfraStack/VCuoreUserPool/VCuoreHostedUiDomain/Resource"
    }
   },
+  "VCuoreChatHistory7AA3B89C": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "sessionId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "N"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "sessionId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "timestamp",
+      "KeyType": "RANGE"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreChatHistory/Resource"
+   }
+  },
+  "VCuoreUserProgress702BF7AE": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "quizId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "userId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "quizId",
+      "KeyType": "RANGE"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreUserProgress/Resource"
+   }
+  },
+  "VCuoreChatHandlerFallbackServiceRole49F860DC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreChatHandlerFallback/ServiceRole/Resource"
+   }
+  },
+  "VCuoreChatHandlerFallbackServiceRoleDefaultPolicy98124601": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VCuoreChatHistory7AA3B89C",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VCuoreChatHistory7AA3B89C",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VCuoreUserProgress702BF7AE",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VCuoreUserProgress702BF7AE",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "bedrock:InvokeModel",
+       "Effect": "Allow",
+       "Resource": "arn:aws:bedrock:ap-northeast-1::foundation-model/anthropic.claude-3-5-haiku-20241022-v1:0"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "VCuoreChatHandlerFallbackServiceRoleDefaultPolicy98124601",
+    "Roles": [
+     {
+      "Ref": "VCuoreChatHandlerFallbackServiceRole49F860DC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreChatHandlerFallback/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "VCuoreChatHandlerFallback8539F2F0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ZipFile": "exports.handler = async function(event) { return { statusCode: 501, body: 'VCuore: lambda source not found. Replace infra/src/lambda/chat.ts with a real handler.' }; }"
+    },
+    "Environment": {
+     "Variables": {
+      "CHAT_TABLE_NAME": {
+       "Ref": "VCuoreChatHistory7AA3B89C"
+      },
+      "PROGRESS_TABLE_NAME": {
+       "Ref": "VCuoreUserProgress702BF7AE"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "VCuoreChatHandlerFallbackServiceRole49F860DC",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "VCuoreChatHandlerFallbackServiceRoleDefaultPolicy98124601",
+    "VCuoreChatHandlerFallbackServiceRole49F860DC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreChatHandlerFallback/Resource"
+   }
+  },
+  "VCuoreRestApi293CA95A": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "Backend API for V-CUORE AI Chat and Quiz features.",
+    "Name": "V-CUORE API Gateway"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Resource"
+   }
+  },
+  "VCuoreRestApiCloudWatchRoleDBFE656A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/CloudWatchRole/Resource"
+   }
+  },
+  "VCuoreRestApiAccount37536741": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "VCuoreRestApiCloudWatchRoleDBFE656A",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "VCuoreRestApi293CA95A"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Account"
+   }
+  },
+  "VCuoreRestApiDeployment27E60D116293cff3b0ac8d92e9d2d584982f3d96": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Backend API for V-CUORE AI Chat and Quiz features.",
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    }
+   },
+   "DependsOn": [
+    "VCuoreRestApichatOPTIONS8644293B",
+    "VCuoreRestApichatPOSTB11BF0BA",
+    "VCuoreRestApichat66E0F4B1",
+    "VCuoreRestApiOPTIONS9CE7DC8E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Deployment/Resource",
+    "aws:cdk:do-not-refactor": true
+   }
+  },
+  "VCuoreRestApiDeploymentStageprodDE6B858E": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "VCuoreRestApiDeployment27E60D116293cff3b0ac8d92e9d2d584982f3d96"
+    },
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "VCuoreRestApiAccount37536741"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "VCuoreRestApiOPTIONS9CE7DC8E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "VCuoreRestApi293CA95A",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/OPTIONS/Resource"
+   }
+  },
+  "VCuoreRestApichat66E0F4B1": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "VCuoreRestApi293CA95A",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "chat",
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/chat/Resource"
+   }
+  },
+  "VCuoreRestApichatOPTIONS8644293B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "VCuoreRestApichat66E0F4B1"
+    },
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/chat/OPTIONS/Resource"
+   }
+  },
+  "VCuoreRestApichatPOSTApiPermissionVCuoreInfraStackVCuoreRestApi67114483POSTchat77503134": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "VCuoreChatHandlerFallback8539F2F0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-northeast-3:743107202624:",
+       {
+        "Ref": "VCuoreRestApi293CA95A"
+       },
+       "/",
+       {
+        "Ref": "VCuoreRestApiDeploymentStageprodDE6B858E"
+       },
+       "/POST/chat"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/ApiPermission.VCuoreInfraStackVCuoreRestApi67114483.POST..chat"
+   }
+  },
+  "VCuoreRestApichatPOSTApiPermissionTestVCuoreInfraStackVCuoreRestApi67114483POSTchat34643798": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "VCuoreChatHandlerFallback8539F2F0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-northeast-3:743107202624:",
+       {
+        "Ref": "VCuoreRestApi293CA95A"
+       },
+       "/test-invoke-stage/POST/chat"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/ApiPermission.Test.VCuoreInfraStackVCuoreRestApi67114483.POST..chat"
+   }
+  },
+  "VCuoreRestApichatPOSTB11BF0BA": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-northeast-3:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "VCuoreChatHandlerFallback8539F2F0",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "VCuoreRestApichat66E0F4B1"
+    },
+    "RestApiId": {
+     "Ref": "VCuoreRestApi293CA95A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VCuoreInfraStack/VCuoreRestApi/Default/chat/POST/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02KwQ6CMBBEv4V7u9YmfAHeNRrPppZqFsouoVs5EP6dGMRwmjdvxoItDZjCjUn7utURnzDdxPlWuTE9PL8JhWG6pzBcmKOqXvTnDaqIgWQ//cxWT9w5pP1hNfNXnbP0WWZFXAdo0uFjLdgjmKJJiHrIJNgFuK65ABNLA+KwAAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPwU7DMBBEv6V314RIfEBpxQ01SuGMNs4StrW9UWwTRZb/HdVJIJz27cysRlvK8qmQxQ5Gt1ftba+pkfHiQd0EjO4jKu4seZbx3eFQMWtx/LS/vMJRE1q/tRZlXU9sgOw2MCtJtJMFw20j4xs0Gu+RDEloME0LMr4Eqzxxvt5yhYMh54htEgRGxprn+zwr1qSmnMuUBPTUgccRJhlrdP7QU07/4UEpDtaLE/aaJ7O8tNkuHrpcMUONjsOg8Bkcilf0X9zezYVWdynJnNI/+Rx8H3wSlluUV/fwXZayfJTF7uqI9kOwngzKep4/RyuDrasBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "VCuoreInfraStack/CDKMetadata/Default"
@@ -107,6 +653,28 @@
   }
  },
  "Outputs": {
+  "VCuoreRestApiEndpoint01EE28BE": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VCuoreRestApi293CA95A"
+      },
+      ".execute-api.ap-northeast-3.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VCuoreRestApiDeploymentStageprodDE6B858E"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
   "UserPoolId": {
    "Description": "User Pool ID for the V-CUORE frontend.",
    "Value": {
@@ -132,6 +700,32 @@
    },
    "Export": {
     "Name": "VCuoreHostedUiDomain"
+   }
+  },
+  "ApiEndpoint": {
+   "Description": "API Gateway endpoint URL for frontend connection.",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VCuoreRestApi293CA95A"
+      },
+      ".execute-api.ap-northeast-3.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VCuoreRestApiDeploymentStageprodDE6B858E"
+      },
+      "/"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "VCuoreApiEndpoint"
    }
   },
   "CallbackUrls": {
