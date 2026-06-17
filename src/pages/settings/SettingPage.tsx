@@ -1,25 +1,48 @@
 // src/pages/settings/SettingsPage.tsx
 import React, { useState } from 'react';
-import { X, User, Palette, Link as LinkIcon, ExternalLink, BookOpen, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { X, User, Palette, Link as LinkIcon, ExternalLink, BookOpen, ShieldCheck, Sun, Moon, MessageSquare } from 'lucide-react';
 
 interface SettingsPageProps {
     initialColor: string;
+    initialTone: string;
     isDark: boolean;
     onToggleTheme: () => void;
     onBack: () => void;
     onApplyColor: (color: string) => void;
+    onApplyTone: (tone: string) => void;
     onLogout?: () => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({ 
     initialColor, 
+    initialTone,
     isDark,
     onToggleTheme,
     onBack, 
     onApplyColor, 
+    onApplyTone,
     onLogout 
 }) => {
     const [customColor, setCustomColor] = useState(initialColor);
+    const [customTone, setCustomTone] = useState(initialTone);
+    const tonePresets = [
+        {
+            label: '🔴 パッション（元気・ツッコミ）',
+            tone: 'エンタメ枠。熱血でツッコミ多め。なんでやねん！って感じで、関西弁も少し入れる。',
+        },
+        {
+            label: '🟣 ゲーマー（ストイック・FPS用語）',
+            tone: 'ガチゲーマー枠。ストイックで少し煽り気味。エイム、パニカン、立ち回りみたいなゲーム用語でAWSを解説する。',
+        },
+        {
+            label: '🟢 ポンコツ先生（親身・一緒に考える）',
+            tone: '真面目バカ・ポンコツ枠。丁寧で親しみやすく、たまに一緒に悩むフリをしながら説明する。',
+        },
+        {
+            label: '🌸 アイドル（全肯定・癒やし）',
+            tone: '清楚アイドル枠。全肯定で褒めて伸ばす。やさしく癒やす口調で、学習のモチベを上げる。',
+        },
+    ];
 
     const getSafeColor = (color: string) => {
         if (!color) return 'transparent';
@@ -107,11 +130,53 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                                 </div>
                             </div>
 
-                            <button 
+                            <button
                                 onClick={() => onApplyColor(customColor)}
                                 className="w-full py-5 bg-slate-900 dark:bg-oshi-primary text-white font-black text-xs uppercase tracking-[0.4em] rounded-2xl hover:opacity-90 active:scale-95 transition-all cursor-pointer border-none"
                             >
                                 Apply System Color / 設定完了
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* 🗣️ AI CHAT TONE SECTION */}
+                    <section className="space-y-6">
+                        <h3 className="text-[10px] font-black text-oshi-primary uppercase tracking-[0.4em] flex items-center gap-2">
+                            <MessageSquare size={14} /> AGENT PERSONA 
+                        </h3>
+                        <div className="flex flex-col gap-6 bg-oshi-primary/5 p-8 rounded-[3rem] border-2 border-oshi-primary/10 transition-colors">
+                            <div className="space-y-2">
+                                <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1 transition-colors">AGENT PERSONA</label>
+                                <textarea
+                                    value={customTone}
+                                    onChange={(e) => setCustomTone(e.target.value)}
+                                    placeholder="例: 丁寧め、でも少しフランク。結論→理由→次の一手の順で短く返す。"
+                                    rows={5}
+                                    className="w-full resize-none bg-card-bg border-2 border-oshi-primary/10 rounded-[2rem] px-6 py-4 text-sm leading-relaxed text-slate-700 dark:text-white focus:outline-none focus:border-oshi-primary transition-all"
+                                />
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-1">
+                                    口調メモを保存すると、Study の AI Support に反映される
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap gap-3">
+                                {tonePresets.map((preset) => (
+                                    <button
+                                        key={preset.label}
+                                        type="button"
+                                        onClick={() => setCustomTone(preset.tone)}
+                                        className="px-4 py-2 rounded-full border border-oshi-primary/15 bg-card-bg text-[10px] font-black tracking-widest text-oshi-primary hover:bg-oshi-primary/10 transition-all cursor-pointer"
+                                    >
+                                        {preset.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => onApplyTone(customTone)}
+                                className="w-full py-5 bg-slate-900 dark:bg-oshi-primary text-white font-black text-xs uppercase tracking-[0.4em] rounded-2xl hover:opacity-90 active:scale-95 transition-all cursor-pointer border-none"
+                            >
+                                Apply AI Tone / 口調を保存
                             </button>
                         </div>
                     </section>

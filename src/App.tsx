@@ -28,6 +28,7 @@ function App() {
   const [settingsOrigin, setSettingsOrigin] = useState<SettingsOrigin>('home');
 
   const [themeColor, setThemeColor] = useState<string>(THEME_CONFIG.DEFAULT_COLOR);
+  const [chatTone, setChatTone] = useState<string>(() => localStorage.getItem('v-cuore-chat-tone') ?? '');
 
   useEffect(() => {
     checkUserStatus();
@@ -69,6 +70,10 @@ function App() {
       unsubscribe();
     };
   }, [themeColor]);
+
+  useEffect(() => {
+    localStorage.setItem('v-cuore-chat-tone', chatTone);
+  }, [chatTone]);
 
   const checkUserStatus = async () => {
     try {
@@ -162,10 +167,12 @@ function App() {
       {isSettingsVisible ? (
         <SettingsPage
           initialColor={themeColor}
+          initialTone={chatTone}
           isDark={isDarkMode}
           onToggleTheme={handleToggleTheme}
           onBack={closeSettingsToOrigin}
           onApplyColor={handleApplyColor}
+          onApplyTone={setChatTone}
           onLogout={handleLogout}
         />
       ) : isLoginVisible ? (
@@ -181,6 +188,7 @@ function App() {
         <StudyPage
           initialQuestionIndex={studyInitialIndex}
           studyMode={studyOrigin === 'demo' ? 'demo' : 'full'}
+          chatTone={chatTone}
           onBack={() => {
             setIsStudyVisible(false);
             if (studyOrigin === 'setup') {
@@ -193,6 +201,7 @@ function App() {
         <ResultPage
           score={lastScore}
           totalQuestions={lastTotalQuestions}
+          chatTone={chatTone}
           onRestart={() => {
             setIsResultVisible(false);
             setIsStudyVisible(false);

@@ -16,6 +16,8 @@ interface ChatMessage {
   text: string;
 }
 
+type ChatToneStyle = 'casual' | 'entertainment' | 'gamer' | 'clumsy' | 'idol' | 'polite' | 'energetic' | 'stern' | 'concise';
+
 // 🚀 実弾データ：本来はここを DB や AI から引っ張ってくる
 const mockQuestions: Question[] = [
   {
@@ -41,35 +43,184 @@ const mockQuestions: Question[] = [
   }
 ];
 
-const buildInitialChat = (question: Question): ChatMessage[] => ([
-  {
-    id: Date.now(),
-    role: 'assistant',
-    text: `AIチューター接続完了。\n${question.id} の攻略をサポートするで。ヒントが欲しければ「ヒント」と送ってな。`,
-  },
-]);
+const resolveChatToneStyle = (tone: string): ChatToneStyle => {
+  const normalizedTone = tone.toLowerCase();
 
-const buildAssistantReply = (text: string, question: Question, isAnswered: boolean): string => {
+  if (normalizedTone.includes('エンタメ') || normalizedTone.includes('パッション') || normalizedTone.includes('ツッコミ') || normalizedTone.includes('関西弁')) {
+    return 'entertainment';
+  }
+
+  if (normalizedTone.includes('ゲーマー') || normalizedTone.includes('fps') || normalizedTone.includes('格ゲ') || normalizedTone.includes('エイム') || normalizedTone.includes('パニカン')) {
+    return 'gamer';
+  }
+
+  if (normalizedTone.includes('ポンコツ') || normalizedTone.includes('真面目バカ') || normalizedTone.includes('一緒に考える') || normalizedTone.includes('親身')) {
+    return 'clumsy';
+  }
+
+  if (normalizedTone.includes('アイドル') || normalizedTone.includes('全肯定') || normalizedTone.includes('癒やし') || normalizedTone.includes('褒めて')) {
+    return 'idol';
+  }
+
+  if (normalizedTone.includes('丁寧') || normalizedTone.includes('ですます') || normalizedTone.includes('礼儀')) {
+    return 'polite';
+  }
+
+  if (normalizedTone.includes('厳し') || normalizedTone.includes('先生') || normalizedTone.includes('教官')) {
+    return 'stern';
+  }
+
+  if (normalizedTone.includes('元気') || normalizedTone.includes('フランク') || normalizedTone.includes('親し')) {
+    return 'energetic';
+  }
+
+  if (normalizedTone.includes('簡潔') || normalizedTone.includes('短く') || normalizedTone.includes('要点')) {
+    return 'concise';
+  }
+
+  return tone.trim() ? 'energetic' : 'casual';
+};
+
+const buildGreeting = (question: Question, style: ChatToneStyle, tone: string): string => {
+  switch (style) {
+    case 'entertainment':
+      return `AIチューター接続完了。\n${question.id} の攻略を一緒にやるで。ヒント欲しかったら「ヒント」って投げてな、なんでやねんポイントも混ぜながら案内するわ。`;
+    case 'gamer':
+      return `AIチューター接続完了。\n${question.id} の攻略を始める。まずは立ち回りを確認しよう。ヒントが欲しければ「ヒント」と送って。`;
+    case 'clumsy':
+      return `AIチューター接続完了。\n${question.id} の攻略を一緒に進めるね。たまに迷うけど、そのぶん丁寧に考えていこう。`;
+    case 'idol':
+      return `AIチューター接続完了。\n${question.id} の攻略をお手伝いします。今日も学習えらいです。ヒントが必要なら「ヒント」と送ってください。`;
+    case 'polite':
+      return `AIチューターの接続が完了しました。\n${question.id} の攻略をお手伝いします。ヒントが必要でしたら「ヒント」と送ってください。`;
+    case 'stern':
+      return `AIチューター接続完了。\n${question.id} の攻略を始める。まずは要件を整理しろ。「ヒント」で次の一手を出す。`;
+    case 'concise':
+      return `AIチューター接続完了。\n${question.id} をサポートする。必要なら「ヒント」と送信。`;
+    case 'energetic':
+      return `AIチューター接続完了。\n${question.id} の攻略を一緒に進めるで。ヒントが欲しければ「ヒント」と送ってな。`;
+    case 'casual':
+    default:
+      return tone.trim()
+        ? `AIチューター接続完了。\n${question.id} の攻略をサポートするで。口調メモは「${tone}」で反映してる。ヒントが欲しければ「ヒント」と送ってな。`
+        : `AIチューター接続完了。\n${question.id} の攻略をサポートするで。ヒントが欲しければ「ヒント」と送ってな。`;
+  }
+};
+
+const buildInitialChat = (question: Question, tone: string): ChatMessage[] => {
+  const style = resolveChatToneStyle(tone);
+
+  return [
+    {
+      id: Date.now(),
+      role: 'assistant',
+      text: buildGreeting(question, style, tone),
+    },
+  ];
+};
+
+const buildAssistantReply = (text: string, question: Question, isAnswered: boolean, tone: string): string => {
   const input = text.toLowerCase();
+  const style = resolveChatToneStyle(tone);
 
   if (input.includes('ヒント') || input.includes('hint')) {
-    return `ポイントは要件の核を見抜くこと。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを軸に考えてみて。`;
+    switch (style) {
+      case 'entertainment':
+        return `ポイントは要件の核や。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを軸に見てみて、なんでやねん案件を潰していこ。`;
+      case 'gamer':
+        return `見るべきは要件の核。\nこの問題は「${question.text.slice(0, 24)}...」の部分が主戦場や。無駄な選択肢は切っていこう。`;
+      case 'clumsy':
+        return `ポイントは要件の核だよ。\nこの問題なら「${question.text.slice(0, 24)}...」を軸に考えるとよさそう。`;
+      case 'idol':
+        return `大事なのは要件の核です。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを見つけられたらすごくえらいです。`;
+      case 'polite':
+        return `ポイントは要件の核を見抜くことです。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを軸に考えてみてください。`;
+      case 'stern':
+        return `要点は要件の核だ。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを軸に考えろ。`;
+      case 'concise':
+        return `要点は要件の核。\n「${question.text.slice(0, 24)}...」を軸に考えて。`;
+      case 'energetic':
+      case 'casual':
+      default:
+        return `ポイントは要件の核を見抜くこと。\nこの問題なら「${question.text.slice(0, 24)}...」のキーワードを軸に考えてみて。`;
+    }
   }
 
   if (input.includes('正解') || input.includes('answer')) {
     if (!isAnswered) {
-      return '先に自力で一回選んでみよう。回答後なら正解理由まで詳しく解説できるで。';
+      return style === 'polite'
+        ? '先に一度ご自身で選んでみてください。回答後なら正解理由まで詳しく解説できます。'
+        : style === 'entertainment'
+          ? '先に一回は自分で選んでみようや。回答後なら正解理由までしっかりツッコみながら説明するで。'
+          : style === 'gamer'
+            ? '先に自分で一回選べ。回答後なら正解理由までちゃんと分解して返す。'
+            : style === 'clumsy'
+              ? '先に一回選んでみよっか。回答後なら、いっしょに正解理由を整理できるよ。'
+              : style === 'idol'
+                ? '先に一度選んでみましょう。回答後なら、正解理由までやさしく一緒に確認できます。'
+        : style === 'stern'
+          ? '先に自力で一回選べ。回答後なら正解理由まで詳しく解説する。'
+          : style === 'concise'
+            ? '先に一回選んでみて。回答後に正解理由を出せる。'
+            : '先に自力で一回選んでみよう。回答後なら正解理由まで詳しく解説できるで。';
     }
-    return `正解は ${String.fromCharCode(65 + question.correctAnswer)} やで。\n理由: ${question.explanation}`;
+    return style === 'polite'
+      ? `正解は ${String.fromCharCode(65 + question.correctAnswer)} です。\n理由: ${question.explanation}`
+      : style === 'entertainment'
+        ? `正解は ${String.fromCharCode(65 + question.correctAnswer)} や。\n理由: ${question.explanation}`
+        : style === 'gamer'
+          ? `正解は ${String.fromCharCode(65 + question.correctAnswer)}。\n理由: ${question.explanation}`
+          : style === 'clumsy'
+            ? `正解は ${String.fromCharCode(65 + question.correctAnswer)} だよ。\n理由: ${question.explanation}`
+            : style === 'idol'
+              ? `正解は ${String.fromCharCode(65 + question.correctAnswer)} です。\n理由: ${question.explanation}`
+              : style === 'stern'
+                ? `正解は ${String.fromCharCode(65 + question.correctAnswer)} だ。\n理由: ${question.explanation}`
+                : style === 'concise'
+                  ? `正解は ${String.fromCharCode(65 + question.correctAnswer)}。\n理由: ${question.explanation}`
+                  : `正解は ${String.fromCharCode(65 + question.correctAnswer)} やで。\n理由: ${question.explanation}`;
   }
 
   if (input.includes('解説') || input.includes('explain')) {
     return isAnswered
       ? question.explanation
-      : 'まだ未回答やから、まずは選択してから解説を見るのがおすすめ。';
+      : style === 'polite'
+        ? 'まだ未回答です。まずは選択してから解説を見るのがおすすめです。'
+        : style === 'entertainment'
+          ? 'まだ未回答や。まずは選んでから解説を見るのがええで。'
+          : style === 'gamer'
+            ? 'まだ未回答。まず選んでから解説に入ろう。'
+            : style === 'clumsy'
+              ? 'まだ未回答だよ。まず選んでから解説を見ていこう。'
+              : style === 'idol'
+                ? 'まだ未回答です。まず選んでから解説を見るのがとってもえらいです。'
+        : style === 'stern'
+          ? 'まだ未回答だ。まずは選択してから解説を見ろ。'
+          : style === 'concise'
+            ? 'まだ未回答。まず選択してから解説を見て。'
+            : 'まだ未回答やから、まずは選択してから解説を見るのがおすすめ。';
   }
 
-  return '了解。問題文の要件整理、選択肢の比較、消去法のどれから進める？「ヒント」と送れば次の一手を出すで。';
+  switch (style) {
+    case 'entertainment':
+      return '了解や。問題文の要件整理、選択肢の比較、消去法のどれからいく？「ヒント」って送ってくれたら、ツッコミ入りで返すで。';
+    case 'gamer':
+      return '了解。問題文の要件整理、選択肢の比較、消去法のどれから詰める？「ヒント」で次のムーブを出す。';
+    case 'clumsy':
+      return '了解。問題文の要件整理、選択肢の比較、消去法のどれから進めようか。ゆっくり一緒に考えよう。';
+    case 'idol':
+      return '了解です。問題文の要件整理、選択肢の比較、消去法のどれから進めましょうか。今日も一緒にがんばりましょう。';
+    case 'polite':
+      return '了解しました。問題文の要件整理、選択肢の比較、消去法のどれから進めますか？「ヒント」と送っていただければ次の一手を出します。';
+    case 'stern':
+      return '了解。問題文の要件整理、選択肢の比較、消去法のどれから進める？「ヒント」と送れば次の一手を出す。';
+    case 'concise':
+      return '了解。要件整理、選択肢比較、消去法のどれからいく？「ヒント」で次の一手。';
+    case 'energetic':
+    case 'casual':
+    default:
+      return '了解。問題文の要件整理、選択肢の比較、消去法のどれから進める？「ヒント」と送れば次の一手を出すで。';
+  }
 };
 
 interface StudyPageProps {
@@ -77,9 +228,10 @@ interface StudyPageProps {
   onFinish: (score: number, totalQuestions: number) => void;
   initialQuestionIndex?: number;
   studyMode?: 'full' | 'demo';
+  chatTone?: string;
 }
 
-export const StudyPage = ({ onBack, onFinish, initialQuestionIndex = 0, studyMode = 'full' }: StudyPageProps) => {
+export const StudyPage = ({ onBack, onFinish, initialQuestionIndex = 0, studyMode = 'full', chatTone = '' }: StudyPageProps) => {
   const initialStudyIndex = studyMode === 'demo' ? 0 : initialQuestionIndex;
   const [currentIndex, setCurrentIndex] = useState(initialStudyIndex);
   const [selected, setSelected] = useState<number | null>(null);
@@ -87,7 +239,7 @@ export const StudyPage = ({ onBack, onFinish, initialQuestionIndex = 0, studyMod
   const [score, setScore] = useState(0);
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(buildInitialChat(mockQuestions[initialQuestionIndex] ?? mockQuestions[0]));
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(buildInitialChat(mockQuestions[initialQuestionIndex] ?? mockQuestions[0], chatTone));
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const questions = studyMode === 'demo'
@@ -121,7 +273,7 @@ export const StudyPage = ({ onBack, onFinish, initialQuestionIndex = 0, studyMod
       setCurrentIndex(nextIndex);
       setSelected(null);
       setIsAnswered(false);
-      setChatMessages(buildInitialChat(questions[nextIndex]));
+      setChatMessages(buildInitialChat(questions[nextIndex], chatTone));
       setChatInput('');
     } else {
       onFinish(score, questions.length); // 🚀 全問終了時にリザルトへ射出
@@ -141,7 +293,7 @@ export const StudyPage = ({ onBack, onFinish, initialQuestionIndex = 0, studyMod
     const assistantMessage: ChatMessage = {
       id: Date.now() + 1,
       role: 'assistant',
-      text: buildAssistantReply(text, currentQ, isAnswered),
+      text: buildAssistantReply(text, currentQ, isAnswered, chatTone),
     };
 
     setChatMessages((prev) => [...prev, userMessage, assistantMessage]);
